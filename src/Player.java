@@ -31,7 +31,7 @@ public class Player extends JComponent {
 
 	public Player(int x, int y) {
 		super();
-		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet_without_bg.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 		//currentImage = sheet.getImage(0, 0);
 		this.x = x;
 		this.y = y;
@@ -117,15 +117,15 @@ public class Player extends JComponent {
 					}
 				}
 			}
-			System.out.println(direction);
+			//System.out.println(direction);
 			if (direction == 1)
 			{
-				System.out.println("Going right");
+				//System.out.println("Going right");
 				currentImage = sheet.getImage(xSprite, ySprite);
 			}
 			else //if (direction == -1)
 			{
-				System.out.println("This should print");
+				//System.out.println("This should print");
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
 			}
 			counter = 0;
@@ -180,12 +180,12 @@ public class Player extends JComponent {
 	
 	public void jump() { 
 		// v = vi + at ---- Physics ----
-		System.out.println("IS JUMPING");
+		//System.out.println("IS JUMPING");
 		isJumping = true;
 		t++;
 		if (t % 4 == 0) {
 			vely = (int) ((velyInit + accel * ((double) (t / 30.0))) * -1);
-			System.out.println(vely);
+			//System.out.println(vely);
 		}
 	}
 

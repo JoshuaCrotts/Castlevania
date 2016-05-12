@@ -2,10 +2,14 @@ package castlevania;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -20,7 +24,7 @@ public class GUI extends JComponent {
 	private int playerHealth;
 
 	public GUI() {
-		for (int i = 0, x = 120; i < 10; i++, x += 18) {
+		for (int i = 0, x = 220; i < 10; i++, x += 18) {
 			Rectangle rect = new Rectangle(x, 43, 12, 30);
 			playerHealthBar.add(rect);
 		}
@@ -44,9 +48,19 @@ public class GUI extends JComponent {
 		g2.setPaint(grad);
 		g2.fillRect(0, 0, 800, 90);
 
-		Font f = new Font("Georgia", Font.PLAIN, 22);
+		Font customFont = null;
+		try {
+		    customFont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/oldschool.ttf")).deriveFont(24f);
+		    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		    ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("fonts/oldschool.ttf")));
+		} catch (IOException e) {
+		    e.printStackTrace();
+		} catch(FontFormatException e) {
+		    e.printStackTrace();
+		}
+		
 		g2.setColor(Color.BLACK);
-		g2.setFont(f);
+		g2.setFont(customFont);
 		g2.drawString("HEALTH:", 15, 68);
 		for (int i = 0; i < playerHealth; i++) {
 			g2.setColor(Color.RED);

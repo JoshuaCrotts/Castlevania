@@ -34,7 +34,7 @@ public class Level extends JComponent{
 
 		this.obstacles = new ArrayList<Entity>();
 		this.music = music;
-		music.play();
+		//music.play();
 		t.start();
 
 	}
@@ -108,9 +108,13 @@ public class Level extends JComponent{
 		return "Level: " + levelName +"\nMusic: "+ music.getFileName();
 	}
 	
+	public void play()
+	{
+		this.music.play();
+	}
 	public int getX()
 	{
-		System.out.println(x);
+		//System.out.println(x);
 		return x;
 	}
 	public void setX()

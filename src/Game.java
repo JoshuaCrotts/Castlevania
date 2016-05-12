@@ -6,13 +6,14 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Game extends JFrame implements Runnable, KeyListener {
 
-	private final int WIDTH = 800, HEIGHT = 600;
+	private final static int WIDTH = 800;
+	private final static int HEIGHT = 600;
+	
 	private boolean running = false;
 	private Player p;
 	private Graphics g;
@@ -20,15 +21,25 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private GUI gui;
 	private boolean aIsDown = false, wIsDown = false, sIsDown = false,
 			dIsDown = false;
+	
 	private Image dbImage;
 	private Graphics dbg;
 	private boolean stillGoing = true;
+	public static boolean shouldShow = false;
 	//private LevelList levels = new LevelList();
 	
 	private Level[] levels = {new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav"))};
 	private int oldHealth, loop = 0;
+	private TitleFrame tFrame;
+	
 	
 	public Game() {
+		tFrame = new TitleFrame();
+		tFrame.show();
+		while(shouldShow == false){
+			
+		};
+		shouldShow = true;
 		p = new Player(0, HEIGHT - 128);
 		oldHealth = p.getHealth();
 		gui = new GUI();
@@ -43,7 +54,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		setResizable(false);
 		pack();
 		t = new Thread(this);
-		setVisible(true);
+		
+		setVisible(shouldShow);
 		addKeyListener(this);
 	}
 
@@ -57,7 +69,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-				Thread.sleep(1L);
+				Thread.sleep(17L);
 				//repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -165,7 +177,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		g.drawImage(dbImage, 0, 0, this);
 	}
 	public void paintComponent(Graphics g){
-		
+		levels[0].play();
 		if(p.getX() <= 0 && stillGoing) 
 			p.setX(0);
 
@@ -188,13 +200,13 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			//System.exit(0);
 		}
 		
-		else{
+		//else{
 		levels[0].paintComponent(g);
 		
 		p.changeImages();
 		g.drawImage(p.getImage(), p.getX(), p.getY(), this);
 		gui.paintComponent(g);
-		}
+		//}
 		
 	}
 	/*@Override
@@ -225,11 +237,11 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		repaint();
 	}*/
 
-	public int getWIDTH() {
+	public static int getWIDTH() {
 		return WIDTH;
 	}
 
-	public int getHEIGHT() {
+	public static int getHEIGHT() {
 		return HEIGHT;
 	}
 }
