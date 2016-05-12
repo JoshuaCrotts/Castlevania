@@ -126,6 +126,8 @@ public class TitleFrame extends JFrame implements ActionListener{
 		
 		play.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				Audio a = new Audio("soundeffects/menuselect.wav");
+				a.play();
 				play.setVisible(false);
 				help.setVisible(true);
 				exit.setVisible(false);
@@ -135,7 +137,20 @@ public class TitleFrame extends JFrame implements ActionListener{
 		
 		help.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				Audio a = new Audio("soundeffects/menuselect.wav");
+				a.play();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				help.setVisible(false);
+				try{
+				a = new Audio("music/frontgates.wav");
+				a.play();
+				Thread.sleep(7500);
+				}catch(Exception ex){ex.printStackTrace();}
 				Game.shouldShow = true;
 				tFrame.dispose();
 			}
@@ -143,6 +158,14 @@ public class TitleFrame extends JFrame implements ActionListener{
 		
 		exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				Audio a = new Audio("soundeffects/menuselect.wav");
+				a.play();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				System.exit(0);
 			}
 		});
