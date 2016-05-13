@@ -152,7 +152,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 				Thread.sleep(7500);
 				}catch(Exception ex){ex.printStackTrace();}
 				Game.shouldShow = true;
-				tFrame.dispose();
+				tFrame.setVisible(false);
 			}
 		});
 		
@@ -169,7 +169,38 @@ public class TitleFrame extends JFrame implements ActionListener{
 				System.exit(0);
 			}
 		});
-	
+		/*
+		JButton go = new JButton();
+		go.setBackground(Color.WHITE);
+		go.setText("<html>You Beat Level "+(Game.getLevelNumber()+1)+"<br/>Click Here To Continue.</html>");
+		go.setFont(customFont);
+		go.setSize(467,100);
+		go.setLocation(170, 250);
+		go.setOpaque(false);
+		go.setContentAreaFilled(false);
+		go.setBorderPainted(false);
+		
+		go.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				Audio a = new Audio("soundeffects/menuselect.wav");
+				a.play();
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				go.setVisible(false);
+				try{
+					Thread.sleep(5000);
+				}catch(Exception ex){ex.printStackTrace();}
+				Game.shouldShow = true;
+				Game.shouldShow2 = false;
+				shouldBeVisible = false;
+				tFrame.setVisible(false);
+			}
+		});
+	*/
 		
 		tFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

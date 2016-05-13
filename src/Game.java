@@ -25,27 +25,33 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private Image dbImage;
 	private Graphics dbg;
 	private boolean stillGoing = true;
-	public static boolean shouldShow = false;
+	public static boolean shouldShow = false; //controls visibility of tFrame
+	public static boolean shouldShow2 = false; //controls visibility of lDoneFrame
 
+	public boolean isLevelDone = false;
 	public boolean isLevelOneDone = false;
 	public boolean isLevelTwoDone = false;
 	public boolean isLevelThreeDone = false;
+	
+	public static int levelNumber = 0;
 
+	public static int getLevelNumber(){return levelNumber;}
+	
 	//private LevelList levels = new LevelList();
 
 	private Level[] levels = {new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")),new Level("levels/level2bg.png",new Audio("music/monsterdance.wav"))};
 	private int oldHealth, loop = 0;
-	private TitleFrame tFrame;
+	private TitleFrame tFrame = new TitleFrame();
 
-	private Audio complete = new Audio("soundeffects/Super_Mario_Bros.wav");
+	private Audio complete = new Audio("music/stageclear.wav");
+	private boolean isStart = true;
 
 
 
 	public Game() {
-		tFrame = new TitleFrame();
 		tFrame.show();
 		while(shouldShow == false){
-
+			System.out.println(); //WHYYYYYYYYYYYYYYYYYYYYYYYYYYYY?
 		};
 		shouldShow = true;
 		p = new Player(0, HEIGHT - 128);
@@ -77,7 +83,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-				Thread.sleep(1L);
+				Thread.sleep(1L); //17L
 				//repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -92,22 +98,26 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
+		if(!isLevelDone){
 		p.isRunning = false;
 		int keyCode = e.getKeyCode();
 		switch (keyCode) {
 		case KeyEvent.VK_W:
 			wIsDown = true;
 			if(p.clearBelow() && !p.isJumping)
+			{
 				p.resetTime(); //Using v = v_i + a*t for velocity, so need to reset time.
+			}
+				
 			p.jump();
 			break;
-			/*case KeyEvent.VK_S:
+		/*case KeyEvent.VK_S:
 			sIsDown = true;
 			p.setY(p.getY() + 10);
 			break;
-			 *
-			 * This is commented out because we don't need 'S' to do anything yet.
-			 */
+		 *
+		 * This is commented out because we don't need 'S' to do anything yet.
+		 */
 		case KeyEvent.VK_A:
 			aIsDown = true;
 			p.isStanding = false;
@@ -128,6 +138,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		if (aIsDown || dIsDown) {
 			p.isRunning = true;
 		}
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -147,13 +158,10 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			sIsDown = false;
 			break;
 		}
+		
 		if (!aIsDown && !dIsDown) //This is where I have to fix things. Along with the below if statement.
 		{
-			if (!p.isJumping)
-			{
-				p.isRunning = false;
-				p.isStanding = true;
-			}
+			p.isStanding = true;
 		}
 
 		if ((aIsDown || dIsDown) && !p.isJumping)
@@ -199,29 +207,29 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 			if(Math.abs(levels[0].getX()) > 7170 && stillGoing){
 
+				setVisible(false);
+				levels[0].setX(7170);
+				levels[0].paintComponent(g);
 				stillGoing = false;
 				levels[0].getMusic().stop();
 				complete.play();
-				p.setX(330);
-				if(p.getX() > 330)
-					p.setX(330);
-				levels[0].setX(7170);
 				//levels[0].setX();
 				//levels[0].setX(getX());
-				
-				if(p.getX() != 0)
-					p.setX(0);
+			    //shouldShow = false;
 
-				JOptionPane.showMessageDialog(null, "YOU BEAT LEVEL ONE.");
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			    int reply = JOptionPane.showConfirmDialog(null, "You beat Level "+(getLevelNumber()+1)+", continue?\nGame Will Load For 3 Seconds.","Continue",JOptionPane.YES_NO_OPTION);
+			    if(reply == JOptionPane.NO_OPTION)System.exit(0);
+			    else{
+			    	try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				isLevelOneDone = true;
-				
-
+				isLevelDone = true;
+				levelNumber++;
+			    }
 				//System.exit(0);
 			}
 
@@ -235,8 +243,19 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			//}
 		}
 		if(isLevelOneDone && !isLevelTwoDone){
+			setVisible(true);
+			shouldShow = true;
+			if(isStart){
+				p = new Player(0, HEIGHT-128);
+				System.out.println("Does this even execute");
+				p.setX(0);
+				stillGoing = true;
+				p.setVelx(0);
+				p.isRunning = false;
+				p.isStanding = true;
+				isStart=false;
+				isLevelDone = false;}
 			levels[1].play();
-			stillGoing = true;
 			if(p.getX() <= 0 && stillGoing) 
 				p.setX(0);
 
@@ -249,20 +268,28 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 			if(Math.abs(levels[1].getX()) > 7170 && stillGoing){
 
+				setVisible(false);
+				levels[1].setX(7170);
+				levels[1].paintComponent(g);
 				stillGoing = false;
 				levels[1].getMusic().stop();
 				complete.play();
-				p.setX(330);
-				if(p.getX() > 330)
-					p.setX(330);
-				levels[1].setX(7170);
 				//levels[0].setX();
 				//levels[0].setX(getX());
+			    //shouldShow = false;
+
+			    int reply = JOptionPane.showConfirmDialog(null, "You beat Level "+(getLevelNumber()+1)+", continue?","Continue",JOptionPane.YES_NO_OPTION);
+			    if(reply == JOptionPane.NO_OPTION)System.exit(0);
+			    else{
+			    	try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				isLevelOneDone = true;
-				JOptionPane.showMessageDialog(null, "YOU BEAT LEVEL TWO.");
-
-
-				//System.exit(0);
+				isLevelDone = true;
+			    }
 			}
 
 			//else{
