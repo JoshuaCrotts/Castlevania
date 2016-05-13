@@ -193,30 +193,31 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		g.drawImage(dbImage, 0, 0, this);
 	}
 	public void paintComponent(Graphics g){
-		if(!isLevelOneDone){
-			levels[0].play();
+		if(!isLevelOneDone){//Basically, if the first level isn't done it's gonna do this if statement only.
+			levels[0].play();//plays the music for the first level
 			if(p.getX() <= 0 && stillGoing) 
-				p.setX(0);
+				p.setX(0);//this if statement says if the player is heading left and trying to exit the screen, they can't.
 
 			if(p.getX() > 330 && stillGoing)
 			{
-				p.setX(330);
-				levels[0].scrollImage();
-				levels[0].paintComponent(g);
+				p.setX(330);//controls whether or not the image should scroll.
+				levels[0].scrollImage();//sets the x coordinate of the screen to itself + 10.
+				levels[0].paintComponent(g); //repaints the Level object.
 			}
 
-			if(Math.abs(levels[0].getX()) > 7170 && stillGoing){
-
-				setVisible(false);
-				levels[0].setX(7170);
-				levels[0].paintComponent(g);
-				stillGoing = false;
-				levels[0].getMusic().stop();
-				complete.play();
+			if(Math.abs(levels[0].getX()) > 7170 && stillGoing){//this if statement will be when the level should be done.
+	
+				setVisible(false);//sets the frame temporarily to false. You can experiment if you wanna try and make it look better.
+				levels[0].setX(7170);//sets the x coordinate to 7170 so it doesn't scroll, but doesn't really work.
+				levels[0].paintComponent(g);//repaints level frame
+				stillGoing = false;//sets the stillGoing variable to false, trying to control stuff.
+				levels[0].getMusic().stop();//stops the music for the Level.
+				complete.play();//plays the victory theme
 				//levels[0].setX();
 				//levels[0].setX(getX());
 			    //shouldShow = false;
-
+				
+				//this should be simple enough
 			    int reply = JOptionPane.showConfirmDialog(null, "You beat Level "+(getLevelNumber()+1)+", continue?\nGame Will Load For 3 Seconds.","Continue",JOptionPane.YES_NO_OPTION);
 			    if(reply == JOptionPane.NO_OPTION)System.exit(0);
 			    else{
@@ -236,19 +237,19 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			//else{
 			levels[0].paintComponent(g);
 
-			p.changeImages();
-			g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+			p.changeImages();//changes the players images dependent on what they're doing
+			g.drawImage(p.getImage(), p.getX(), p.getY(), this);//draws the player to screen
 			if(stillGoing)
-				gui.paintComponent(g);
+				gui.paintComponent(g);//if the game is still going, it repaints the gui
 			//}
 		}
 		if(isLevelOneDone && !isLevelTwoDone){
-			setVisible(true);
-			shouldShow = true;
-			if(isStart){
-				p = new Player(0, HEIGHT-128);
-				System.out.println("Does this even execute");
-				p.setX(0);
+			setVisible(true);//resets the frames visibility to true
+			shouldShow = true;//essentially a control variable for the statement above
+			if(isStart){//this will only execute on the first pass.
+				p = new Player(0, HEIGHT-128);//resets the player's position.
+				System.out.println("Does this even execute");//just a test
+				p.setX(0);//below are statements trying to get the player to not move on start.
 				stillGoing = true;
 				p.setVelx(0);
 				p.isRunning = false;
