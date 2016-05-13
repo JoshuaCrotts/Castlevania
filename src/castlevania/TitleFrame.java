@@ -51,7 +51,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 		tFrame.getContentPane().setBackground(Color.BLACK);
 		//tFrame.setVisible(true);
 		
-		JButton play = new JButton();
+		final JButton play = new JButton();
 		play.setBackground(Color.WHITE);
 		play.setText("PLAY GAME");
 		play.setFont(customFont);
@@ -71,7 +71,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
 		
-		JButton help = new JButton();
+		final JButton help = new JButton();
 		help.setBackground(Color.WHITE);
 		help.setText("<html>To Play The Game, All You Must Do Is Survive.<br /><br />Use The Space Bar to Attack, <br /><br>W to Jump, A and D To Move Left And Right.</html>");
 		help.setFont(customFont);
@@ -82,7 +82,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 		help.setContentAreaFilled(false);
 		help.setBorderPainted(false);
 
-		JButton madeBy = new JButton();
+		final JButton madeBy = new JButton();
 		madeBy.setBackground(Color.WHITE);
 		madeBy.setText("Made by Joshua Crotts And Brandon Willis");
 		madeBy.setFont(customFont);
@@ -103,7 +103,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
 		
-		JButton exit = new JButton();
+		final JButton exit = new JButton();
 		exit.setBackground(Color.WHITE);
 		exit.setText("QUIT");
 		exit.setFont(customFont);
@@ -213,7 +213,6 @@ public class TitleFrame extends JFrame implements ActionListener{
 		tFrame.setVisible(true);
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
