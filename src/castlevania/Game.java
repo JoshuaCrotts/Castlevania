@@ -39,7 +39,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	
 	//private LevelList levels = new LevelList();
 
-	private Level[] levels = {new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")),new Level("levels/level2bg.png",new Audio("music/monsterdance.wav"))};
+	private Level[] levels = {new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")),new Level("levels/level2bg.png",new Audio("music/monsterdance.wav")),new Level("levels/level3bg.png",new Audio("music/wickedchild.wav"))};
 	private int oldHealth, loop = 0;
 	private TitleFrame tFrame = new TitleFrame();
 
@@ -192,6 +192,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		g.drawImage(dbImage, 0, 0, this);
 	}
 	public void paintComponent(Graphics g){
+		//LEVEL 1
 		if(!isLevelOneDone){//Basically, if the first level isn't done it's gonna do this if statement only.
 			levels[0].play();//plays the music for the first level
 			if(p.getX() <= 0 && stillGoing) 
@@ -229,6 +230,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				isLevelOneDone = true;
 				isLevelDone = true;
 				levelNumber++;
+				isStart = true;
 			    }
 				//System.exit(0);
 			}
@@ -242,6 +244,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				gui.paintComponent(g);//if the game is still going, it repaints the gui
 			//}
 		}
+	
+		//LEVEL 2
 		if(isLevelOneDone && !isLevelTwoDone){
 			setVisible(true);//resets the frames visibility to true
 			shouldShow = true;//essentially a control variable for the statement above
@@ -288,13 +292,78 @@ public class Game extends JFrame implements Runnable, KeyListener {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				isLevelOneDone = true;
+				isLevelTwoDone = true;
 				isLevelDone = true;
+				levelNumber++;
+				isStart = true;
 			    }
 			}
 
 			//else{
 			levels[1].paintComponent(g);
+
+			p.changeImages();
+			g.drawImage(p.getImage(), p.getX(), p.getY(), this);
+			if(stillGoing)
+				gui.paintComponent(g);
+			//}
+		}
+		//LEVEL THREE
+		if(isLevelOneDone && isLevelTwoDone && !isLevelThreeDone){
+			setVisible(true);//resets the frames visibility to true
+			shouldShow = true;//essentially a control variable for the statement above
+			if(isStart){//this will only execute on the first pass.
+				p = new Player(0, HEIGHT-128);//resets the player's position.
+				System.out.println("Does this even execute");//just a test
+				p.setX(0);//below are statements trying to get the player to not move on start.
+				stillGoing = true;
+				p.setVelx(0);
+				p.isRunning = false;
+				p.isStanding = true;
+				isStart=false;
+				isLevelDone = false;}
+			levels[2].play();
+			if(p.getX() <= 0 && stillGoing) 
+				p.setX(0);
+
+			if(p.getX() > 330 && stillGoing)
+			{
+				p.setX(330);
+				levels[2].scrollImage();
+				levels[2].paintComponent(g);
+			}
+
+			if(Math.abs(levels[2].getX()) > 7170 && stillGoing){
+
+				setVisible(false);
+				levels[2].setX(7170);
+				levels[2].paintComponent(g);
+				stillGoing = false;
+				levels[2].getMusic().stop();
+				Audio a2 = new Audio("music/stageclear.wav");
+				a2.play();
+				//levels[0].setX();
+				//levels[0].setX(getX());
+			    //shouldShow = false;
+
+			    int reply = JOptionPane.showConfirmDialog(null, "You beat Level "+(getLevelNumber()+1)+", continue?","Continue",JOptionPane.YES_NO_OPTION);
+			    if(reply == JOptionPane.NO_OPTION)System.exit(0);
+			    else{
+			    	try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				isLevelThreeDone = true;
+				isLevelDone = true;
+				levelNumber++;
+				isStart = true;
+			    }
+			}
+
+			//else{
+			levels[2].paintComponent(g);
 
 			p.changeImages();
 			g.drawImage(p.getImage(), p.getX(), p.getY(), this);
