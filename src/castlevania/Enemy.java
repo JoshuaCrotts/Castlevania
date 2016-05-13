@@ -43,6 +43,4 @@ public abstract class Enemy extends Entity {
 	public SpriteSheet getSHEET() {
 		return SHEET;
 	}
-	
-	
 }

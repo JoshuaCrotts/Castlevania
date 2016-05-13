@@ -164,9 +164,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			p.isStanding = true;
 		}
 
-		if ((aIsDown || dIsDown) && !p.isJumping)
+		if ((aIsDown || dIsDown) && !p.isJumping) //On the ground and moving.
 		{
-			System.out.println("This is happening");
 			p.isRunning = true;
 			//p.setVelx(p.);
 			p.isStanding = false; //Changed this.
