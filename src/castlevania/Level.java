@@ -21,6 +21,9 @@ public class Level extends JComponent{
 	private String levelName;
 	private Thread t = new Thread();
 	private ArrayList<Entity> obstacles;
+	private ArrayList<Enemy> enemies;
+	private Graphics g;
+
 
 	public Level(String level, Audio music)
 	{
@@ -33,6 +36,7 @@ public class Level extends JComponent{
 		}
 
 		this.obstacles = new ArrayList<Entity>();
+		this.enemies = new ArrayList<Enemy>();
 		this.music = music;
 		//music.play();
 		t.start();
@@ -47,6 +51,17 @@ public class Level extends JComponent{
 		super.paintComponent(g);
 		g.drawImage(image,x,y,null);
 		repaint();
+	}
+	
+	public void paintAllEntities()
+	{
+		for(int i = 0; i<obstacles.size(); i++){
+			obstacles.get(i).paintComponent(g);
+		}
+	}
+	
+	public BufferedImage getEnemyImage(int i){
+		return enemies.get(i).getImage();
 	}
 	
 	public void scrollImage()
@@ -124,6 +139,16 @@ public class Level extends JComponent{
 	public void setX(int x)
 	{
 		this.x = x;
+	}
+	public void addEnemy(Enemy enemy){
+		enemies.add(enemy);
+	}
+	public ArrayList<Enemy> getEnemyArrayList(){
+		return enemies;
+	}
+	public int getEnemyAmount()
+	{
+		return enemies.size();
 	}
 
 }

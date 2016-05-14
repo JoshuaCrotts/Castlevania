@@ -1,12 +1,13 @@
 package castlevania;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Ghoul extends Enemy{
 	
 	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2, RANGE = 50;
 	
-	static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_one_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+	static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 	
 	private BufferedImage oldImage, currentImage = sheet.getImage(0, 0);
 	
@@ -23,7 +24,18 @@ public class Ghoul extends Enemy{
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
 	}
-	
+	public int getX(){
+		return this.x;
+	}
+	public int getY(){
+		return this.y;
+	}
+	public void setX(int x){
+		this.x = x;
+	}
+	public void setY(int y){
+		this.y = y;
+	}
 	public BufferedImage changeImages()
 	{
 		oldImage = currentImage;
@@ -74,6 +86,11 @@ public class Ghoul extends Enemy{
 		}
 		return false;
 	}
+	/*@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		g.drawImage(currentImage, x, y, null);
+	}*/
 
 	private boolean outsideRange() {
 		if (Math.abs(this.x - xOrigin) > RANGE)
@@ -85,5 +102,9 @@ public class Ghoul extends Enemy{
 
 	private void setVelx(int vel) {
 		this.velX = vel;
+	}
+	
+	public BufferedImage getImage(){
+		return currentImage;
 	}
 }

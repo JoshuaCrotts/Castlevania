@@ -1,5 +1,6 @@
 package castlevania;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
@@ -28,6 +29,11 @@ public abstract class Entity extends JComponent{
 	public Entity() {
 		// TODO Auto-generated constructor stub
 	}
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+	}	
+	
 	public int getWidth() {
 		return width;
 	}
