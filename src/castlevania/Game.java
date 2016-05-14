@@ -47,7 +47,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private boolean isStart = true;
 
 
-
 	public Game() {
 		tFrame.show();
 		while(shouldShow == false){
@@ -56,11 +55,20 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		shouldShow = true;
 		p = new Player(0, HEIGHT - 128);
 		oldHealth = p.getHealth();
+
+		levels[0].getEnemyArrayList().add(new Ghoul(0, HEIGHT-128));
+		levels[0].getEnemyArrayList().add(new Ghoul(100, HEIGHT-128));
+		levels[0].getEnemyArrayList().add(new Ghoul(200, HEIGHT-128));
+		levels[0].getEnemyArrayList().add(new Ghoul(900, HEIGHT-128));
+		
+		addEnemies(0);
+		
 		gui = new GUI();
 		setSize(new Dimension(800, 600));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		setMaximumSize(new Dimension(WIDTH, HEIGHT));
+		
 		add(p);
 		add(gui);
 		setLocationRelativeTo(null);
@@ -83,7 +91,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-				Thread.sleep(1L); //17L
+				Thread.sleep(17L); //17L
 				//repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -164,8 +172,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			p.isStanding = true;
 		}
 
-		if ((aIsDown || dIsDown) && !p.isJumping) //On the ground and moving.
+		if ((aIsDown || dIsDown) && !p.isJumping)
 		{
+			System.out.println("This is happening");
 			p.isRunning = true;
 			//p.setVelx(p.);
 			p.isStanding = false; //Changed this.
@@ -237,7 +246,19 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 			//else{
 			levels[0].paintComponent(g);
-
+			//this loop can be used for changing all of the enemies images then drawing them.
+			//for(int i = 0; i<levels[0].getEnemyArrayList().size(); i++){
+			//		levels[0].getEnemyArrayList().get(0).changeImages();
+			//		g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
+			//}
+			
+			updateEnemyPosition(0);
+		
+			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+				g.drawImage(levels[levelNumber].getEnemyArrayList().get(i).getImage(),levels[levelNumber].getEnemyArrayList().get(i).getX(),levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
+			}
+		    //USE THIS YOU DUMB ASS//.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
+			//System.out.println(levels[0].getEnemyArrayList().get(0).getX());
 			p.changeImages();//changes the players images dependent on what they're doing
 			g.drawImage(p.getImage(), p.getX(), p.getY(), this);//draws the player to screen
 			if(stillGoing)
@@ -373,33 +394,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		}
 
 	}
-	/*@Override
-	public void paint(Graphics g) {
-		int newHealth = p.getHealth();
-		try {
-			Thread.sleep(17);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// System.out.println(p.getX() + ", " + p.getY());
-		if (loop == 0)
-		{
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, WIDTH, HEIGHT);
-			p.paintComponent(g);
-			gui.paintComponent(g);
-		}
-
-		if (newHealth != oldHealth)
-		{
-			gui.setPlayerHealth(newHealth);
-			gui.paintComponent(g);
-		}
-		p.paintComponent(g);
-		loop++;
-		repaint();
-	}*/
 
 	public static int getWIDTH() {
 		return WIDTH;
@@ -407,5 +401,26 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 	public static int getHEIGHT() {
 		return HEIGHT;
+	}
+	public void addEnemies(int level)
+	{	
+		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
+			this.getContentPane().add(levels[level].getEnemyArrayList().get(i));
+		}
+		
+	}
+	/*
+	public void paintEnemies(int level)
+	{
+		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
+			levels[level].getEnemyArrayList().get(i).changeImages();
+			levels[level].getEnemyArrayList().get(i).paintComponent(g);
+		}
+	}*/
+	
+	public void updateEnemyPosition(int level){
+		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
+			levels[level].getEnemyArrayList().get(i).changeImages();
+		}
 	}
 }
