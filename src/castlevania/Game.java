@@ -56,6 +56,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		shouldShow = true;
 		p = new Player(0, HEIGHT - 128);
 		oldHealth = p.getHealth();
+		levels[0].addEnemy(new Ghoul(800,600));
 		gui = new GUI();
 		setSize(new Dimension(800, 600));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -164,8 +165,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			p.isStanding = true;
 		}
 
-		if ((aIsDown || dIsDown) && !p.isJumping) //On the ground and moving.
+		if ((aIsDown || dIsDown) && !p.isJumping)
 		{
+			System.out.println("This is happening");
 			p.isRunning = true;
 			//p.setVelx(p.);
 			p.isStanding = false; //Changed this.
@@ -237,11 +239,18 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 			//else{
 			levels[0].paintComponent(g);
-
+			//this loop can be used for changing all of the enemies images then drawing them.
+			//for(int i = 0; i<levels[0].getEnemyArrayList().size(); i++){
+			//		levels[0].getEnemyArrayList().get(0).changeImages();
+			//		g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
+			//}
+			levels[0].getEnemyArrayList().get(0).changeImages();
+			g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			p.changeImages();//changes the players images dependent on what they're doing
 			g.drawImage(p.getImage(), p.getX(), p.getY(), this);//draws the player to screen
 			if(stillGoing)
 				gui.paintComponent(g);//if the game is still going, it repaints the gui
+			paintEnemies(0);
 			//}
 		}
 	
@@ -373,33 +382,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		}
 
 	}
-	/*@Override
-	public void paint(Graphics g) {
-		int newHealth = p.getHealth();
-		try {
-			Thread.sleep(17);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// System.out.println(p.getX() + ", " + p.getY());
-		if (loop == 0)
-		{
-			g.setColor(Color.WHITE);
-			g.fillRect(0, 0, WIDTH, HEIGHT);
-			p.paintComponent(g);
-			gui.paintComponent(g);
-		}
-
-		if (newHealth != oldHealth)
-		{
-			gui.setPlayerHealth(newHealth);
-			gui.paintComponent(g);
-		}
-		p.paintComponent(g);
-		loop++;
-		repaint();
-	}*/
 
 	public static int getWIDTH() {
 		return WIDTH;
@@ -407,5 +389,17 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 	public static int getHEIGHT() {
 		return HEIGHT;
+	}
+	
+	public void addEnemies()
+	{
+		levels[0].addEnemy(new Ghoul(0,HEIGHT-128));
+	}
+	public void paintEnemies(int level)
+	{
+		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
+			levels[level].getEnemyArrayList().get(i).changeImages();
+			levels[level].getEnemyArrayList().get(i).paintComponent(g);
+		}
 	}
 }
