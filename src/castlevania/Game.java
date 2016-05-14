@@ -47,7 +47,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private boolean isStart = true;
 
 
-
 	public Game() {
 		tFrame.show();
 		while(shouldShow == false){
@@ -56,12 +55,14 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		shouldShow = true;
 		p = new Player(0, HEIGHT - 128);
 		oldHealth = p.getHealth();
-		levels[0].addEnemy(new Ghoul(800,600));
+
+		
 		gui = new GUI();
 		setSize(new Dimension(800, 600));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		setMaximumSize(new Dimension(WIDTH, HEIGHT));
+		
 		add(p);
 		add(gui);
 		setLocationRelativeTo(null);
@@ -84,7 +85,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-				Thread.sleep(1L); //17L
+				Thread.sleep(17L); //17L
 				//repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -246,6 +247,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			//}
 			levels[0].getEnemyArrayList().get(0).changeImages();
 			g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
+			System.out.println(levels[0].getEnemyArrayList().get(0).getX());
 			p.changeImages();//changes the players images dependent on what they're doing
 			g.drawImage(p.getImage(), p.getX(), p.getY(), this);//draws the player to screen
 			if(stillGoing)
@@ -390,10 +392,16 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	public static int getHEIGHT() {
 		return HEIGHT;
 	}
-	
-	public void addEnemies()
+	public void addEnemies(int level)
 	{
-		levels[0].addEnemy(new Ghoul(0,HEIGHT-128));
+		levels[level].getEnemyArrayList().add(new Ghoul(0, HEIGHT-128));
+		levels[level].getEnemyArrayList().add(new Ghoul(100, HEIGHT-128));
+		levels[level].getEnemyArrayList().add(new Ghoul(2900, HEIGHT-128));
+		/*
+		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
+			add(levels[level].getEnemyArrayList().get(i));
+		}*/
+		
 	}
 	public void paintEnemies(int level)
 	{
