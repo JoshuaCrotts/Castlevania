@@ -56,6 +56,12 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		p = new Player(0, HEIGHT - 128);
 		oldHealth = p.getHealth();
 
+		levels[0].getEnemyArrayList().add(new Ghoul(0, HEIGHT-128));
+		levels[0].getEnemyArrayList().add(new Ghoul(100, HEIGHT-128));
+		levels[0].getEnemyArrayList().add(new Ghoul(200, HEIGHT-128));
+		levels[0].getEnemyArrayList().add(new Ghoul(900, HEIGHT-128));
+		
+		addEnemies(0);
 		
 		gui = new GUI();
 		setSize(new Dimension(800, 600));
@@ -245,14 +251,18 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			//		levels[0].getEnemyArrayList().get(0).changeImages();
 			//		g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			//}
-			levels[0].getEnemyArrayList().get(0).changeImages();
-			g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
-			System.out.println(levels[0].getEnemyArrayList().get(0).getX());
+			
+			updateEnemyPosition(0);
+		
+			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+				g.drawImage(levels[levelNumber].getEnemyArrayList().get(i).getImage(),levels[levelNumber].getEnemyArrayList().get(i).getX(),levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
+			}
+		    //USE THIS YOU DUMB ASS//.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
+			//System.out.println(levels[0].getEnemyArrayList().get(0).getX());
 			p.changeImages();//changes the players images dependent on what they're doing
 			g.drawImage(p.getImage(), p.getX(), p.getY(), this);//draws the player to screen
 			if(stillGoing)
 				gui.paintComponent(g);//if the game is still going, it repaints the gui
-			paintEnemies(0);
 			//}
 		}
 	
@@ -393,21 +403,24 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		return HEIGHT;
 	}
 	public void addEnemies(int level)
-	{
-		levels[level].getEnemyArrayList().add(new Ghoul(0, HEIGHT-128));
-		levels[level].getEnemyArrayList().add(new Ghoul(100, HEIGHT-128));
-		levels[level].getEnemyArrayList().add(new Ghoul(2900, HEIGHT-128));
-		/*
+	{	
 		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
-			add(levels[level].getEnemyArrayList().get(i));
-		}*/
+			this.getContentPane().add(levels[level].getEnemyArrayList().get(i));
+		}
 		
 	}
+	/*
 	public void paintEnemies(int level)
 	{
 		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
 			levels[level].getEnemyArrayList().get(i).changeImages();
 			levels[level].getEnemyArrayList().get(i).paintComponent(g);
+		}
+	}*/
+	
+	public void updateEnemyPosition(int level){
+		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
+			levels[level].getEnemyArrayList().get(i).changeImages();
 		}
 	}
 }
