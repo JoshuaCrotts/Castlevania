@@ -3,11 +3,11 @@ package castlevania;
 public abstract class Enemy extends Entity {
 
 	private static final long serialVersionUID = 2003297664785729009L;
-	private int x;
-	private int y;
-	private final int WIDTH;
-	private final int HEIGHT;
-	private SpriteSheet SHEET;
+	protected int x;
+	protected int y;
+	protected final int WIDTH;
+	protected final int HEIGHT;
+	protected SpriteSheet SHEET;
 	
 	public Enemy(int x, int y, int WIDTH, int HEIGHT, SpriteSheet sheet)
 	{

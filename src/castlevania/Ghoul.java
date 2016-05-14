@@ -1,14 +1,89 @@
 package castlevania;
 
+import java.awt.image.BufferedImage;
+
 public class Ghoul extends Enemy{
 	
-	final static int WIDTH = 5;
-	final static int HEIGHT = 10;
-	final static int SPRITEROWS = 1;
-	final static int SPRITECOLS = 2;
+	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2, RANGE = 50;
+	
 	static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_one_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+	
+	private BufferedImage oldImage, currentImage = sheet.getImage(0, 0);
+	
+	private int counter = 0, xSprite = 0, ySprite = 0, turningPoint;
+	
+	public boolean isPassive = true, isAttacking = true;
+	
+	private final int RUNSPEED = 8, MOVESPEED = 5;
+	
+	public int direction = 1, velX, velY = 0, xOrigin;
+	
 	public Ghoul(int x, int y)
 	{
 		super(x, y, WIDTH, HEIGHT, sheet);
+		this.xOrigin = x;
+	}
+	
+	public BufferedImage changeImages()
+	{
+		oldImage = currentImage;
+		counter++;
+		
+		//Just sets Sprites and running Speeds.
+		if (counter >= 5) { //Should be 5
+			if(changeDirectionOrNaw())
+				direction *= -1;
+			if (isPassive) 
+			{
+				setVelx(MOVESPEED * direction);
+				if (ySprite == 0) {
+					ySprite++;
+				} else {
+					ySprite = 0;
+				}
+			} 
+			
+			else if (isAttacking) // This sprite is for when he's attacking.
+			{
+				
+			}
+			//System.out.println(direction);
+			if (direction == 1)
+			{
+				currentImage = sheet.getImage(xSprite, ySprite);
+			}
+			else
+			{
+				currentImage = sheet.getFlippedImage(xSprite, ySprite);
+			}
+			counter = 0;
+		}
+		this.x += velX;
+		this.y += velY;
+		return currentImage;	
+	}
+	private boolean changeDirectionOrNaw() {
+		/*
+		 * Tests if the difference between the enemy's
+		 * x-Coordinate and Origin would be closer to the origin
+		 * with or without the direction added.
+		 */
+		if (Math.abs(this.x - xOrigin) < (Math.abs((this.x + direction) - xOrigin)) && outsideRange())
+		{
+			return true;
+		}
+		return false;
+	}
+
+	private boolean outsideRange() {
+		if (Math.abs(this.x - xOrigin) > RANGE)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	private void setVelx(int vel) {
+		this.velX = vel;
 	}
 }

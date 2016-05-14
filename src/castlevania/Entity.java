@@ -1,5 +1,7 @@
 package castlevania;
 
+import java.awt.image.BufferedImage;
+
 import javax.swing.JComponent;
 
 
@@ -20,6 +22,8 @@ public abstract class Entity extends JComponent{
 	{
 		this.sheet = sheet;
 	}
+	
+	public abstract BufferedImage changeImages();
 
 	public Entity() {
 		// TODO Auto-generated constructor stub
