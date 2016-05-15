@@ -12,11 +12,19 @@ public abstract class Enemy extends Entity {
 	protected final int HEIGHT;
 	protected SpriteSheet SHEET;
 	
+	private int attackDamage;
+	
 	public Enemy(int x, int y, int WIDTH, int HEIGHT, SpriteSheet sheet)
 	{
-		super(x, y, sheet);
+		this.x = x;
+		this.y = y;
 		this.WIDTH = WIDTH;
 		this.HEIGHT = HEIGHT;
+	}
+	public Enemy(int WIDTH, int HEIGHT){
+		this.WIDTH = WIDTH;
+		this.HEIGHT = HEIGHT;
+		
 	}
 	
 	public void paintComponent(Graphics g){
@@ -52,4 +60,13 @@ public abstract class Enemy extends Entity {
 	public SpriteSheet getSHEET() {
 		return SHEET;
 	}
+	public abstract void setIsAttacking(boolean b);
+	
+	public abstract void setIsPassive(boolean p);
+	
+	public abstract int getDirection();
+	
+	public abstract boolean isAttacking();
+	
+	public abstract boolean isPassive();
 }

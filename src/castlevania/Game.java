@@ -14,7 +14,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	public final static int WIDTH = 800, HEIGHT = 600, SCROLLSPOT = 330;
 
 	private boolean running = false;
-	private Player p;
+	public static Player p;
 	private Graphics g;
 	private Thread t;
 	private GUI gui;
@@ -59,12 +59,13 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		p = new Player(0, HEIGHT - 128);
 		oldHealth = p.getHealth();
 
-		levels[0].getEnemyArrayList().add(new Ghoul(0, HEIGHT - 128));
-		levels[0].getEnemyArrayList().add(new Ghoul(100, HEIGHT - 128));
-		levels[0].getEnemyArrayList().add(new Ghoul(200, HEIGHT - 128));
-		levels[0].getEnemyArrayList().add(new Ghoul(900, HEIGHT - 128));
+//		levels[0].getEnemyArrayList().add(new Ghoul(0, HEIGHT - 128));
+//		levels[0].getEnemyArrayList().add(new Ghoul(100, HEIGHT - 128));
+//		levels[0].getEnemyArrayList().add(new Ghoul(200, HEIGHT - 128));
+//		levels[0].getEnemyArrayList().add(new Ghoul(900, HEIGHT - 128));
 
-		// addEnemies(0);
+		addEnemies(0);
+		addEnemiesToFrame(0);
 
 		gui = new GUI();
 		setSize(new Dimension(800, 600));
@@ -94,9 +95,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-
-				System.out.println("Player X: " + p.getX() + " Level X: " + levels[0].getX() + ".");
-
 				Thread.sleep(17L); // 17L
 				// repaint();
 			} catch (InterruptedException e) {
@@ -180,9 +178,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		}
 
 		if ((aIsDown || dIsDown) && !p.isJumping) {
-			System.out.println("This is happening");
 			p.isRunning = true;
-			// p.setVelx(p.);
 			p.isStanding = false; // Changed this.
 		}
 
@@ -281,11 +277,26 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			// levels[0].getEnemyArrayList().get(0).changeImages();
 			// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			// }
-
+			
+			//checks if aggressive or naw
+			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+				if(Math.abs(p.getX() - levels[levelNumber].getEnemyArrayList().get(i).getX()) <=600){
+					levels[levelNumber].getEnemyArrayList().get(i).setIsAttacking(true);
+					levels[levelNumber].getEnemyArrayList().get(i).setIsPassive(false);
+				}
+				else{
+					levels[levelNumber].getEnemyArrayList().get(i).setIsAttacking(false);
+					levels[levelNumber].getEnemyArrayList().get(i).setIsPassive(true);
+				}
+				System.out.println("ABS: "+Math.abs(p.getX() - levels[levelNumber].getEnemyArrayList().get(i).getX())+" PLAYER DIRECTION: "+p.getDirection()+" ENEMY DIR: "+levels[levelNumber].getEnemyArrayList().get(0).getDirection());
+				System.out.println("IS ATTACKING: "+levels[levelNumber].getEnemyArrayList().get(0).isAttacking());
+			}
+			//changes all enemy graphics
 			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
 				levels[levelNumber].getEnemyArrayList().get(i).changeImages();
 			}
 			
+			//draws the enemies
 			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
 				levels[levelNumber].getEnemyArrayList().get(i).changeImages();
 				g.drawImage(levels[levelNumber].getEnemyArrayList().get(i).getImage(),levels[levelNumber].getEnemyArrayList().get(i).getX()-levels[levelNumber].getX(), HEIGHT-128, null);
@@ -451,7 +462,16 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		return HEIGHT;
 	}
 
-	public void addEnemies(int level) {
+	public void addEnemies(int level){
+//		addE(level,new Ghoul(0, HEIGHT - 128));
+//		addE(level,new Ghoul(100, HEIGHT - 128));
+//		addE(level,new Ghoul(200, HEIGHT - 128));
+//		addE(level,new Ghoul(900, HEIGHT - 128));
+		addE(level,new Skeleton(1250, HEIGHT-128));
+//		addE(level,new Skeleton(1250, HEIGHT-128));
+//		addE(level,new Knight(2000,HEIGHT-128));
+	}
+	public void addEnemiesToFrame(int level) {
 		for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
 			this.getContentPane().add(levels[level].getEnemyArrayList().get(i));
 		}
@@ -468,5 +488,13 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
 			levels[level].getEnemyArrayList().get(i).changeImages();
 		}
+	}
+	
+	public void addE(int level, Enemy e){
+		levels[level].getEnemyArrayList().add(e);
+	}
+	
+	public static Player getPlayer(){
+		return p;
 	}
 }

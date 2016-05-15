@@ -15,15 +15,23 @@ public class Player extends JComponent {
 	private int xSprite = 0, ySprite = 0;
 	private int x, velx;
 
-	private boolean firstLoop = true; //For paint method.
-	
+	private boolean firstLoop = true; // For paint method.
+
 	private BufferedImage currentImage, oldImage;
-	
-	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; //Should be 1
+
+	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; // Should
+																			// be
+																			// 1
+
+	public int getDirection() {
+		return direction;
+	}
 
 	private Image dbImage;
 	private Graphics dbg;
-	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10; //RUNSPEED = 10;
+	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10; // RUNSPEED
+																								// =
+																								// 10;
 	private SpriteSheet sheet;
 	private int health;
 	private ArrayList<Item> items;
@@ -32,32 +40,30 @@ public class Player extends JComponent {
 	public Player(int x, int y) {
 		super();
 		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
-		//currentImage = sheet.getImage(0, 0);
+		// currentImage = sheet.getImage(0, 0);
 		this.x = x;
 		this.y = y;
 		health = 10;
 		items = new ArrayList<Item>(); // for items gathered in game
 		setFocusable(true);
-		//setDoubleBuffered(true);
-		//oldImage = sheet.getImage(0,0);
+		// setDoubleBuffered(true);
+		// oldImage = sheet.getImage(0,0);
 	}
 
-	public BufferedImage changeImages()
-	{	
+	public BufferedImage changeImages() {
 		oldImage = currentImage;
 		counter++;
-		if(isSpacePressed)
-		{
-			currentImage = sheet.getImage(0,1);
-			if(direction != -1)
-				currentImage = (sheet.getImage(1,1));
+		if (isSpacePressed) {
+			currentImage = sheet.getImage(0, 1);
+			if (direction != -1)
+				currentImage = (sheet.getImage(1, 1));
 			else
-				currentImage = sheet.getFlippedImage(1,1);
-			
+				currentImage = sheet.getFlippedImage(1, 1);
+
 			isSpacePressed = false;
 			return currentImage;
 		}
-		if (isJumping) { //This probably needs to go in the counter.
+		if (isJumping) { // This probably needs to go in the counter.
 			if (clearBelow() && clearAbove()) {
 				jump();
 			} else {
@@ -67,20 +73,17 @@ public class Player extends JComponent {
 				ySprite = 0;
 			}
 		}
-		
-		//Just sets Sprites and running Speeds.
-		if (counter >= 5) { //Should be 5
+
+		// Just sets Sprites and running Speeds.
+		if (counter >= 5) { // Should be 5
 			if (isJumping) {
 				xSprite = 0;
 				ySprite = 5;
-			} 
-			else if (isStanding)
-			{
+			} else if (isStanding) {
 				setVelx(0);
 				xSprite = 0;
 				ySprite = 0;
-			}
-			else if (isRunning) // I'm going to have images be returned
+			} else if (isRunning) // I'm going to have images be returned
 									// differently
 			// depending on what the player is doing. This part
 			// is if it's running.
@@ -92,8 +95,8 @@ public class Player extends JComponent {
 				} else {
 					ySprite = 0;
 				}
-			} 
-			
+			}
+
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
 				xSprite = 1; // Both of the attacks are in the same row.
@@ -106,25 +109,23 @@ public class Player extends JComponent {
 													// The image
 						if (ySprite == 0) {
 							ySprite = 1;
-						} else {                    //This will not work
+						} else { // This will not work
 							ySprite = 0;
 						}
 					}
 				} else {
 					for (int i = 2; i < 4; i++) {
-						return sheet.getImage(1, i); //This will not work
+						return sheet.getImage(1, i); // This will not work
 					}
 				}
 			}
-			//System.out.println(direction);
-			if (direction == 1)
-			{
-				//System.out.println("Going right");
+			// System.out.println(direction);
+			if (direction == 1) {
+				// System.out.println("Going right");
 				currentImage = sheet.getImage(xSprite, ySprite);
-			}
-			else //if (direction == -1)
+			} else // if (direction == -1)
 			{
-				//System.out.println("This should print");
+				// System.out.println("This should print");
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
 			}
 			counter = 0;
@@ -132,33 +133,31 @@ public class Player extends JComponent {
 		this.x += velx;
 		this.y += vely;
 		return currentImage;
-	
+
 	}
 
-	public boolean checkRepaint()
-	{
+	public boolean checkRepaint() {
 		if (currentImage == oldImage)
 			return false;
 		if (velx != 0 || vely != 0)
 			return false;
 		return true;
 	}
-	
-	
-//	public void paint(Graphics g)
-//	{
-//		dbImage = createImage(getWIDTH(), getHEIGHT());
-//		dbg = dbImage.getGraphics();
-//		paintComponent(dbg);
-//		g.drawImage(dbImage, 0, 0, this);
-//	}
-//	@Override
-//	public void paintComponent(Graphics g) {
-//		//super.paintComponent(g);
-//		Graphics2D g2 = (Graphics2D) g;
-//		g2.drawImage(this.currentImage,x,y,this);
-//		repaint();
-//	}
+
+	// public void paint(Graphics g)
+	// {
+	// dbImage = createImage(getWIDTH(), getHEIGHT());
+	// dbg = dbImage.getGraphics();
+	// paintComponent(dbg);
+	// g.drawImage(dbImage, 0, 0, this);
+	// }
+	// @Override
+	// public void paintComponent(Graphics g) {
+	// //super.paintComponent(g);
+	// Graphics2D g2 = (Graphics2D) g;
+	// g2.drawImage(this.currentImage,x,y,this);
+	// repaint();
+	// }
 
 	public boolean clearBelow() // Modify later to make it check below for
 								// platforms.
@@ -173,18 +172,19 @@ public class Player extends JComponent {
 	public boolean clearAbove() {
 		return true;
 	}
+
 	public void resetTime() {
 		this.t = 0;
 	}
-	
-	public void jump() { 
+
+	public void jump() {
 		// v = vi + at ---- Physics ----
-		//System.out.println("IS JUMPING");
+		// System.out.println("IS JUMPING");
 		isJumping = true;
 		t++;
 		if (t % 4 == 0) {
 			vely = (int) ((velyInit + accel * ((double) (t / 30.0))) * -1);
-			//System.out.println(vely);
+			// System.out.println(vely);
 		}
 	}
 
@@ -192,15 +192,14 @@ public class Player extends JComponent {
 		direction = dir;
 	}
 
-	public void setImage(int x, int y)
-	{
-		currentImage = sheet.getImage(x,y);
+	public void setImage(int x, int y) {
+		currentImage = sheet.getImage(x, y);
 	}
-	
-	public BufferedImage getImageWithXAndY(int x, int y)
-	{
-		return sheet.getImage(x,y);
+
+	public BufferedImage getImageWithXAndY(int x, int y) {
+		return sheet.getImage(x, y);
 	}
+
 	public boolean onGround() {
 		return true;
 	}
@@ -269,12 +268,10 @@ public class Player extends JComponent {
 		return SPRITECOLS;
 	}
 
-	
 	public SpriteSheet getSheet() {
 		return sheet;
 	}
 
-	
 	public void setSheet(SpriteSheet sheet) {
 		this.sheet = sheet;
 	}
@@ -302,9 +299,8 @@ public class Player extends JComponent {
 	public int getVelx() {
 		return this.velx;
 	}
-	
-	public BufferedImage getImage()
-	{
+
+	public BufferedImage getImage() {
 		return currentImage;
 	}
 }

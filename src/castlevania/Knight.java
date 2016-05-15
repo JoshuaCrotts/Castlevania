@@ -3,25 +3,25 @@ package castlevania;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class Ghoul extends Enemy{
+public class Knight extends Enemy{
 	
-	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2, RANGE = 100;
+	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 3, RANGE = 200;
 	
-	private static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+	static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_three_spritesheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 	
-	private BufferedImage currentImage = sheet.getImage(0, 0);
+	private BufferedImage oldImage, currentImage = sheet.getImage(0, 0);
 	
-	private int counter = 0, xSprite = 0, ySprite = 0;
+	private int counter = 0, xSprite = 0, ySprite = 0, turningPoint;
 	
 	public boolean isPassive = true, isAttacking = true;
 	
-	private int attackDamage;
-	
-	private final int RUNSPEED = 8, MOVESPEED = 2;
+	private final int RUNSPEED = 8, MOVESPEED = 5;
 	
 	public int direction = 1, velX, velY = 0, xOrigin;
 	
-	public Ghoul(int x, int y)
+	private int attackDamage;
+	
+	public Knight(int x, int y)
 	{
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
@@ -40,32 +40,26 @@ public class Ghoul extends Enemy{
 	}
 	public BufferedImage changeImages()
 	{
+		oldImage = currentImage;
 		counter++;
 		
 		//Just sets Sprites and running Speeds.
 		if (counter >= 5) { //Should be 5
 			if(changeDirectionOrNaw())
 				direction *= -1;
-			
-			testAction();
-			
 			if (isPassive) 
 			{
 				setVelx(MOVESPEED * direction);
+				if (ySprite == 0) {
+					ySprite++;
+				} else {
+					ySprite = 0;
+				}
 			} 
 			
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
-				setVelx(RUNSPEED * direction);
-				if(Game.getPlayer().getDirection() == 1){
-					direction = 1;
-				}else direction = -1;
-			
-			}
-			if (ySprite == 0) {
-				ySprite++;
-			} else {
-				ySprite = 0;
+				
 			}
 			//System.out.println(direction);
 			if (direction == 1)
@@ -80,10 +74,7 @@ public class Ghoul extends Enemy{
 		}
 		this.x += velX;
 		this.y += velY;
-		return currentImage;
-	}
-	private void testAction() {
-		//Have this test the player's position and the ghoul's
+		return currentImage;	
 	}
 	private boolean changeDirectionOrNaw() {
 		/*
@@ -91,7 +82,7 @@ public class Ghoul extends Enemy{
 		 * x-Coordinate and Origin would be closer to the origin
 		 * with or without the direction added.
 		 */
-		if ((Math.abs(this.x - xOrigin) < (Math.abs((this.x + direction) - xOrigin)) && outsideRange()) && !isAttacking && isPassive)
+		if (Math.abs(this.x - xOrigin) < (Math.abs((this.x + direction) - xOrigin)) && outsideRange())
 		{
 			return true;
 		}
@@ -115,24 +106,24 @@ public class Ghoul extends Enemy{
 	public BufferedImage getImage(){
 		return currentImage;
 	}
-	
-	public boolean isAttacking(){
-		return isAttacking();
-	}
 	@Override
-	public void setIsAttacking(boolean b){
+	public void setIsAttacking(boolean b) {
 		this.isAttacking = b;
+		
+	}
+	
+	public void setIsPassive(boolean p){
+		this.isPassive = p;
 	}
 	
 	public boolean isPassive(){
 		return isPassive;
 	}
-	@Override
-	public void setIsPassive(boolean p){
-		this.isPassive = p;
+	public boolean isAttacking(){
+		return isAttacking;
 	}
 	
-	public int getDirection() {
+	public int getDirection(){
 		return direction;
 	}
 
