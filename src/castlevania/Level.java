@@ -13,11 +13,10 @@ public class Level extends JComponent{
 
 	private static final long serialVersionUID = 1737878072499692441L;
 	private BufferedImage image;
-	private boolean loading;
-	private boolean won;
+	private boolean loading, won;
 	private Audio music;
-	private int x = 0;
-	private int y = 0;
+	private int x = 0, y = 0;
+	private final int SCROLLSPEED = 10;
 	private String levelName;
 	private Thread t = new Thread();
 	private ArrayList<Entity> obstacles;
@@ -49,7 +48,8 @@ public class Level extends JComponent{
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.drawImage(image,x,y,null);
+		BufferedImage drawnImage = image.getSubimage(this.x, this.y, Game.WIDTH, Game.HEIGHT);
+		g.drawImage(drawnImage, 0, 0,null);
 		repaint();
 	}
 	
@@ -66,15 +66,18 @@ public class Level extends JComponent{
 	
 	public void scrollImage()
 	{
-		this.x -= 10;
+		this.x += SCROLLSPEED;
 	}
+	
 	public void stopScroll()
 	{
 		this.x = getX();
 	}
+	
 	public String getLevelName(){
 		return levelName;
 	}
+	
 	public BufferedImage getImage() {
 		return image;
 	}
@@ -87,6 +90,7 @@ public class Level extends JComponent{
 	{
 		return loading;
 	}
+	
 	public void setLoading(boolean loading)
 	{
 		this.loading = loading;
@@ -127,25 +131,31 @@ public class Level extends JComponent{
 	{
 		this.music.play();
 	}
+	
 	public int getX()
 	{
 		//System.out.println(x);
 		return x;
 	}
+	
 	public void setX()
 	{
 		this.x = 0;
 	}
+	
 	public void setX(int x)
 	{
 		this.x = x;
 	}
+	
 	public void addEnemy(Enemy enemy){
 		enemies.add(enemy);
 	}
+	
 	public ArrayList<Enemy> getEnemyArrayList(){
 		return enemies;
 	}
+	
 	public int getEnemyAmount()
 	{
 		return enemies.size();

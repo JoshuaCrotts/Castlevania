@@ -91,7 +91,6 @@ public class Ghoul extends Enemy{
 		super.paintComponent(g);
 		g.drawImage(currentImage, x, y, null);
 	}*/
-
 	private boolean outsideRange() {
 		if (Math.abs(this.x - xOrigin) > RANGE)
 		{
@@ -99,11 +98,9 @@ public class Ghoul extends Enemy{
 		}
 		return false;
 	}
-
 	private void setVelx(int vel) {
 		this.velX = vel;
-	}
-	
+	}	
 	public BufferedImage getImage(){
 		return currentImage;
 	}

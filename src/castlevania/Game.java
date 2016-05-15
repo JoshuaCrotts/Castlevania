@@ -11,8 +11,8 @@ import javax.swing.JOptionPane;
 
 public class Game extends JFrame implements Runnable, KeyListener {
 
-	private final static int WIDTH = 800;
-	private final static int HEIGHT = 600;
+	public final static int WIDTH = 800;
+	public final static int HEIGHT = 600;
 
 	private boolean running = false;
 	private Player p;
@@ -38,13 +38,17 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	public static int getLevelNumber(){return levelNumber;}
 	
 	//private LevelList levels = new LevelList();
-
-	private Level[] levels = {new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")),new Level("levels/level2bg.png",new Audio("music/monsterdance.wav")),new Level("levels/level3bg.png",new Audio("music/wickedchild.wav"))};
 	private int oldHealth, loop = 0;
 	private TitleFrame tFrame = new TitleFrame();
 
 	private Audio complete = new Audio("music/stageclear.wav");
 	private boolean isStart = true;
+	
+	private Level[] levels = {
+			new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")),
+			new Level("levels/level2bg.png",new Audio("music/monsterdance.wav")),
+			new Level("levels/level3bg.png",new Audio("music/wickedchild.wav"))
+			};
 
 
 	public Game() {
@@ -91,6 +95,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
+				
+				System.out.println("Player X: " + p.getX() + " Level X: " + levels[0].getX() + ".");
+				
 				Thread.sleep(17L); //17L
 				//repaint();
 			} catch (InterruptedException e) {
@@ -200,6 +207,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		paintComponent(dbg);
 		g.drawImage(dbImage, 0, 0, this);
 	}
+	
 	public void paintComponent(Graphics g){
 		//LEVEL 1
 		if(!isLevelOneDone){//Basically, if the first level isn't done it's gonna do this if statement only.
@@ -207,9 +215,10 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			if(p.getX() <= 0 && stillGoing) 
 				p.setX(0);//this if statement says if the player is heading left and trying to exit the screen, they can't.
 
-			if(p.getX() > 330 && stillGoing)
+			if((p.getX() - levels[0].getX()) >= 330 && stillGoing)
 			{
-				p.setX(330);//controls whether or not the image should scroll.
+				//p.setX(330);//controls whether or not the image should scroll.
+				System.out.println(p.getX() - levels[0].getX());
 				levels[0].scrollImage();//sets the x coordinate of the screen to itself + 10.
 				levels[0].paintComponent(g); //repaints the Level object.
 			}
@@ -233,7 +242,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			    	try {
 						Thread.sleep(3000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				isLevelOneDone = true;
@@ -258,6 +266,10 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				g.drawImage(levels[levelNumber].getEnemyArrayList().get(i).getImage(),levels[levelNumber].getEnemyArrayList().get(i).getX(),levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
 			}
 		    //USE THIS YOU DUMB ASS//.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
+			
+			//Hey dumbass: Enemy temp = levels[0].getEnemyArrayList().get(0); 
+			//g.drawImage(temp.getImage(), temp.getX(), temp.getY(), null); You're welcome.
+			
 			//System.out.println(levels[0].getEnemyArrayList().get(0).getX());
 			p.changeImages();//changes the players images dependent on what they're doing
 			g.drawImage(p.getImage(), p.getX(), p.getY(), this);//draws the player to screen
@@ -396,12 +408,13 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	}
 
 	public static int getWIDTH() {
-		return WIDTH;
-	}
+	return WIDTH;
+}
 
 	public static int getHEIGHT() {
-		return HEIGHT;
-	}
+	return HEIGHT;
+}
+
 	public void addEnemies(int level)
 	{	
 		for(int i = 0; i<levels[level].getEnemyAmount(); i++){
