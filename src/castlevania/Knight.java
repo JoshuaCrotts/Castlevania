@@ -15,7 +15,7 @@ public class Knight extends Enemy{
 	
 	public boolean isPassive = true, isAttacking = true;
 	
-	private final int RUNSPEED = 8, MOVESPEED = 1;
+	private final int RUNSPEED = 8, MOVESPEED = 5;
 	
 	public int direction = 1, velX, velY = 0, xOrigin;
 	

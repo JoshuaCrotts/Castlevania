@@ -15,6 +15,8 @@ public class Ghoul extends Enemy{
 	
 	public boolean isPassive = true, isAttacking = true;
 	
+	private int attackDamage;
+	
 	private final int RUNSPEED = 8, MOVESPEED = 2;
 	
 	public int direction = 1, velX, velY = 0, xOrigin;
