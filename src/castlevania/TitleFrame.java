@@ -148,8 +148,8 @@ public class TitleFrame extends JFrame implements ActionListener{
 				help.setVisible(false);
 				try{
 				a = new Audio("music/frontgates.wav");
-				a.play();
-				Thread.sleep(7500);
+				//a.play();
+				//Thread.sleep(7500);
 				}catch(Exception ex){ex.printStackTrace();}
 				Game.shouldShow = true;
 				tFrame.setVisible(false);

@@ -42,6 +42,7 @@ public class Player extends JComponent {
 		//oldImage = sheet.getImage(0,0);
 	}
 
+
 	public BufferedImage changeImages()
 	{	
 		oldImage = currentImage;
