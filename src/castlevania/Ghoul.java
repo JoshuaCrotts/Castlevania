@@ -9,9 +9,9 @@ public class Ghoul extends Enemy{
 	
 	private static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 	
-	private BufferedImage oldImage, currentImage = sheet.getImage(0, 0);
+	private BufferedImage currentImage = sheet.getImage(0, 0);
 	
-	private int counter = 0, xSprite = 0, ySprite = 0, turningPoint;
+	private int counter = 0, xSprite = 0, ySprite = 0;
 	
 	public boolean isPassive = true, isAttacking = true;
 	
@@ -40,26 +40,28 @@ public class Ghoul extends Enemy{
 	}
 	public BufferedImage changeImages()
 	{
-		oldImage = currentImage;
 		counter++;
 		
 		//Just sets Sprites and running Speeds.
 		if (counter >= 5) { //Should be 5
 			if(changeDirectionOrNaw())
 				direction *= -1;
+			
+			testAction();
+			
 			if (isPassive) 
 			{
 				setVelx(MOVESPEED * direction);
-				if (ySprite == 0) {
-					ySprite++;
-				} else {
-					ySprite = 0;
-				}
 			} 
 			
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
-				
+				setVelx(RUNSPEED * direction);
+			}
+			if (ySprite == 0) {
+				ySprite++;
+			} else {
+				ySprite = 0;
 			}
 			//System.out.println(direction);
 			if (direction == 1)
@@ -75,6 +77,9 @@ public class Ghoul extends Enemy{
 		this.x += velX;
 		this.y += velY;
 		return currentImage;	
+	}
+	private void testAction() {
+		//Have this test the player's position and the ghoul's
 	}
 	private boolean changeDirectionOrNaw() {
 		/*

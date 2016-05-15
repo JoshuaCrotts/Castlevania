@@ -95,9 +95,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-
-				System.out.println("Player X: " + p.getX() + " Level X: " + levels[0].getX() + ".");
-
 				Thread.sleep(17L); // 17L
 				// repaint();
 			} catch (InterruptedException e) {
@@ -181,9 +178,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		}
 
 		if ((aIsDown || dIsDown) && !p.isJumping) {
-			System.out.println("This is happening");
 			p.isRunning = true;
-			// p.setVelx(p.);
 			p.isStanding = false; // Changed this.
 		}
 

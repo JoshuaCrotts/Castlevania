@@ -1,5 +1,7 @@
 package castlevania;
 
+import java.awt.image.BufferedImage;
+
 public class Boss extends Enemy{
 
 	private static final long serialVersionUID = -7424536528712509152L;
@@ -8,9 +10,16 @@ public class Boss extends Enemy{
 		super(x, y, WIDTH, HEIGHT, SHEET);
 		// TODO Auto-generated constructor stub
 	}
-	
-	
 
+	@Override
+	public BufferedImage getImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-
+	@Override
+	public BufferedImage changeImages() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
