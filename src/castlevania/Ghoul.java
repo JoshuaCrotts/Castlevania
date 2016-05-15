@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class Ghoul extends Enemy{
 	
-	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2, RANGE = 50;
+	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2, RANGE = 100;
 	
 	static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 	
@@ -15,7 +15,7 @@ public class Ghoul extends Enemy{
 	
 	public boolean isPassive = true, isAttacking = true;
 	
-	private final int RUNSPEED = 8, MOVESPEED = 5;
+	private final int RUNSPEED = 8, MOVESPEED = 2;
 	
 	public int direction = 1, velX, velY = 0, xOrigin;
 	

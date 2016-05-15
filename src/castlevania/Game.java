@@ -18,15 +18,14 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private Graphics g;
 	private Thread t;
 	private GUI gui;
-	private boolean aIsDown = false, wIsDown = false, sIsDown = false,
-			dIsDown = false;
+	private boolean aIsDown = false, wIsDown = false, sIsDown = false, dIsDown = false;
 
 	private Image dbImage;
 	private Graphics dbg;
 	private boolean stillGoing = true;
 	public static boolean shouldShow = false; // controls visibility of tFrame
 	public static boolean shouldShow2 = false; // controls visibility of
-												// lDoneFrame
+	// lDoneFrame
 
 	public boolean isLevelDone = false;
 	public boolean isLevelOneDone = false;
@@ -46,11 +45,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private Audio complete = new Audio("music/stageclear.wav");
 	private boolean isStart = true;
 
-	private Level[] levels = {
-			new Level("levels/level1bg.png", new Audio(
-					"music/vampirekiller.wav")),
-			new Level("levels/level2bg.png",
-					new Audio("music/monsterdance.wav")),
+	private Level[] levels = { new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")),
+			new Level("levels/level2bg.png", new Audio("music/monsterdance.wav")),
 			new Level("levels/level3bg.png", new Audio("music/wickedchild.wav")) };
 
 	public Game() {
@@ -68,7 +64,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		levels[0].getEnemyArrayList().add(new Ghoul(200, HEIGHT - 128));
 		levels[0].getEnemyArrayList().add(new Ghoul(900, HEIGHT - 128));
 
-		addEnemies(0);
+		// addEnemies(0);
 
 		gui = new GUI();
 		setSize(new Dimension(800, 600));
@@ -99,8 +95,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			try {
 				repaint();
 
-				System.out.println("Player X: " + p.getX() + " Level X: "
-						+ levels[0].getX() + ".");
+				System.out.println("Player X: " + p.getX() + " Level X: " + levels[0].getX() + ".");
 
 				Thread.sleep(17L); // 17L
 				// repaint();
@@ -125,7 +120,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				wIsDown = true;
 				if (p.clearBelow() && !p.isJumping) {
 					p.resetTime(); // Using v = v_i + a*t for velocity, so need
-									// to reset time.
+					// to reset time.
 				}
 
 				p.jump();
@@ -179,7 +174,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		}
 
 		if (!aIsDown && !dIsDown) // This is where I have to fix things. Along
-									// with the below if statement.
+		// with the below if statement.
 		{
 			p.isStanding = true;
 		}
@@ -214,20 +209,20 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	public void paintComponent(Graphics g) {
 		// LEVEL 1
 		if (!isLevelOneDone) {// Basically, if the first level isn't done it's
-								// gonna do this if statement only.
+			// gonna do this if statement only.
 			levels[0].play();// plays the music for the first level
 			if ((p.getX() - levels[0].getX() <= 0) && stillGoing)// this if
-																	// statement
-																	// says if
-																	// the
-																	// player is
-																	// heading
-																	// left and
-																	// trying to
-																	// exit the
-																	// screen,
-																	// they
-																	// can't.
+				// statement
+				// says if
+				// the
+				// player is
+				// heading
+				// left and
+				// trying to
+				// exit the
+				// screen,
+				// they
+				// can't.
 				p.setX(levels[0].getX());
 
 			if ((p.getX() - levels[0].getX()) >= 330 && stillGoing) {
@@ -236,22 +231,22 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			}
 
 			if (Math.abs(levels[0].getX()) > 7170 && stillGoing) {// this if
-																	// statement
-																	// will be
-																	// when the
-																	// level
-																	// should be
-																	// done.
+				// statement
+				// will be
+				// when the
+				// level
+				// should be
+				// done.
 
 				setVisible(false);// sets the frame temporarily to false. You
-									// can experiment if you wanna try and make
-									// it look better.
+				// can experiment if you wanna try and make
+				// it look better.
 				levels[0].setX(7170);// sets the x coordinate to 7170 so it
-										// doesn't scroll, but doesn't really
-										// work.
+				// doesn't scroll, but doesn't really
+				// work.
 				levels[0].paintComponent(g);// repaints level frame
 				stillGoing = false;// sets the stillGoing variable to false,
-									// trying to control stuff.
+				// trying to control stuff.
 				levels[0].getMusic().stop();// stops the music for the Level.
 				complete.play();// plays the victory theme
 				// levels[0].setX();
@@ -260,8 +255,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 				// this should be simple enough
 				int reply = JOptionPane.showConfirmDialog(null,
-						"You beat Level " + (getLevelNumber() + 1)
-								+ ", continue?\nGame Will Load For 3 Seconds.",
+						"You beat Level " + (getLevelNumber() + 1) + ", continue?\nGame Will Load For 3 Seconds.",
 						"Continue", JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.NO_OPTION)
 					System.exit(0);
@@ -288,44 +282,38 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			// }
 
-			updateEnemyPosition(0);
-
 			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
-
-				Enemy temp = levels[levelNumber].getEnemyArrayList().get(0);
-
-				g.drawImage(temp.getImage(),
-						(temp.getX() - levels[levelNumber].getX()),
-						temp.getY(), null);
+				levels[levelNumber].getEnemyArrayList().get(i).changeImages();
 			}
-
-			// USE THIS YOU DUMB
-			// ASS//.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
-
-			// Hey dumbass: Enemy temp = levels[0].getEnemyArrayList().get(0);
-			// g.drawImage(temp.getImage(), temp.getX(), temp.getY(), null);
-			// You're welcome.
+			
+			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+				levels[levelNumber].getEnemyArrayList().get(i).changeImages();
+				g.drawImage(levels[levelNumber].getEnemyArrayList().get(i).getImage(),levels[levelNumber].getEnemyArrayList().get(i).getX()-levels[levelNumber].getX(), HEIGHT-128, null);
+			}
 
 			// System.out.println(levels[0].getEnemyArrayList().get(0).getX());
 			p.changeImages();// changes the players images dependent on what
-								// they're doing
-			g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
-					this);// draws the player to screen
+			// they're doing
+			g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(), this);// draws
+																					// the
+																					// player
+																					// to
+																					// screen
 			if (stillGoing)
 				gui.paintComponent(g);// if the game is still going, it repaints
-										// the gui
+			// the gui
 		}
 
 		// LEVEL 2
 		if (isLevelOneDone && !isLevelTwoDone) {
 			setVisible(true);// resets the frames visibility to true
 			shouldShow = true;// essentially a control variable for the
-								// statement above
+			// statement above
 			if (isStart) {// this will only execute on the first pass.
 				p = new Player(0, HEIGHT - 128);// resets the player's position.
 				System.out.println("Does this even execute");// just a test
 				p.setX(0);// below are statements trying to get the player to
-							// not move on start.
+				// not move on start.
 				stillGoing = true;
 				p.setVelx(0);
 				p.isRunning = false;
@@ -357,8 +345,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				// shouldShow = false;
 
 				int reply = JOptionPane.showConfirmDialog(null,
-						"You beat Level " + (getLevelNumber() + 1)
-								+ ", continue?", "Continue",
+						"You beat Level " + (getLevelNumber() + 1) + ", continue?", "Continue",
 						JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.NO_OPTION)
 					System.exit(0);
@@ -389,12 +376,12 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		if (isLevelOneDone && isLevelTwoDone && !isLevelThreeDone) {
 			setVisible(true);// resets the frames visibility to true
 			shouldShow = true;// essentially a control variable for the
-								// statement above
+			// statement above
 			if (isStart) {// this will only execute on the first pass.
 				p = new Player(0, HEIGHT - 128);// resets the player's position.
 				System.out.println("Does this even execute");// just a test
 				p.setX(0);// below are statements trying to get the player to
-							// not move on start.
+				// not move on start.
 				stillGoing = true;
 				p.setVelx(0);
 				p.isRunning = false;
@@ -426,8 +413,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				// shouldShow = false;
 
 				int reply = JOptionPane.showConfirmDialog(null,
-						"You beat Level " + (getLevelNumber() + 1)
-								+ ", continue?", "Continue",
+						"You beat Level " + (getLevelNumber() + 1) + ", continue?", "Continue",
 						JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.NO_OPTION)
 					System.exit(0);
@@ -471,12 +457,12 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		}
 	}
 
-	/*
-	 * public void paintEnemies(int level) { for(int i = 0;
-	 * i<levels[level].getEnemyAmount(); i++){
-	 * levels[level].getEnemyArrayList().get(i).changeImages();
-	 * levels[level].getEnemyArrayList().get(i).paintComponent(g); } }
-	 */
+	public void paintEnemies(int level) {
+		for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
+			levels[level].getEnemyArrayList().get(i).changeImages();
+			g.drawImage(levels[level].getEnemyArrayList().get(i).getImage(),levels[level].getEnemyArrayList().get(i).getX()-levels[level].getX(), levels[level].getEnemyArrayList().get(i).getX()-levels[level].getY(), null);
+		}
+	}
 
 	public void updateEnemyPosition(int level) {
 		for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
