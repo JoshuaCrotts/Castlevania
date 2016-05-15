@@ -64,9 +64,9 @@ public class Level extends JComponent{
 		return enemies.get(i).getImage();
 	}
 	
-	public void scrollImage()
+	public void scrollImage(int playerPosition)
 	{
-		this.x += SCROLLSPEED;
+		this.x = playerPosition - Game.SCROLLSPOT;
 	}
 	
 	public void stopScroll()
