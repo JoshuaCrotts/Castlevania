@@ -3,11 +3,11 @@ package castlevania;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class Ghoul extends Enemy{
+public class Knight extends Enemy{
 	
-	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2, RANGE = 100;
+	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 3, RANGE = 200;
 	
-	private static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+	static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_three_spritesheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 	
 	private BufferedImage oldImage, currentImage = sheet.getImage(0, 0);
 	
@@ -15,11 +15,11 @@ public class Ghoul extends Enemy{
 	
 	public boolean isPassive = true, isAttacking = true;
 	
-	private final int RUNSPEED = 8, MOVESPEED = 2;
+	private final int RUNSPEED = 8, MOVESPEED = 1;
 	
 	public int direction = 1, velX, velY = 0, xOrigin;
 	
-	public Ghoul(int x, int y)
+	public Knight(int x, int y)
 	{
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
