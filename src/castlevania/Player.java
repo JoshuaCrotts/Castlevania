@@ -12,7 +12,7 @@ public class Player extends JComponent {
 	private static int counter = 0;
 	private BufferedImage currentImage, oldImage;
 	private int xSprite = 0, ySprite = 0, x, velx, y, vely, velyInit = 15, accel = -20, t = 0, health, direction = 1;
-	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10;
+	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 40;
 	private SpriteSheet sheet;
 	private ArrayList<Item> items;
 	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false, isSpacePressed = false;
