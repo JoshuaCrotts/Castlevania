@@ -27,6 +27,18 @@ public abstract class Enemy extends Entity {
 		
 	}
 	
+	protected void testCollision() {
+		Player player = Game.getPlayer();
+		int playerX = player.getX();
+		int playerY = player.getY();
+		
+		if ((Math.abs(this.x - playerX) <= player.getWIDTH())
+				&& (Math.abs(this.y - playerY) <= player.getHEIGHT()))
+		{
+			player.lose();
+		}
+	}
+	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 	}

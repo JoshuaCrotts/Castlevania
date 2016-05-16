@@ -1,7 +1,5 @@
 package castlevania;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -12,28 +10,10 @@ public class Player extends JComponent {
 
 	private static final long serialVersionUID = -5471880502989465049L;
 	private static int counter = 0;
-	private int xSprite = 0, ySprite = 0;
-	private int x, velx;
-
-	private boolean firstLoop = true; // For paint method.
-
 	private BufferedImage currentImage, oldImage;
-
-	private int y, vely, velyInit = 15, accel = -20, t = 0, direction = 1; // Should
-																			// be
-																			// 1
-
-	public int getDirection() {
-		return direction;
-	}
-
-	private Image dbImage;
-	private Graphics dbg;
-	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10; // RUNSPEED
-																								// =
-																								// 10;
+	private int xSprite = 0, ySprite = 0, x, velx, y, vely, velyInit = 15, accel = -20, t = 0, health, direction = 1;
+	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10;
 	private SpriteSheet sheet;
-	private int health;
 	private ArrayList<Item> items;
 	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false, isSpacePressed = false;
 
@@ -46,23 +26,21 @@ public class Player extends JComponent {
 		health = 10;
 		items = new ArrayList<Item>(); // for items gathered in game
 		setFocusable(true);
-		// setDoubleBuffered(true);
-		// oldImage = sheet.getImage(0,0);
 	}
 
 	public BufferedImage changeImages() {
 		oldImage = currentImage;
 		counter++;
-		if (isSpacePressed) {
+		/*if (isSpacePressed) {
 			currentImage = sheet.getImage(0, 1);
-			if (direction != -1)
+			if (direction == 1)
 				currentImage = (sheet.getImage(1, 1));
 			else
 				currentImage = sheet.getFlippedImage(1, 1);
 
 			isSpacePressed = false;
 			return currentImage;
-		}
+		}*/
 		if (isJumping) { // This probably needs to go in the counter.
 			if (clearBelow() && clearAbove()) {
 				jump();
@@ -167,6 +145,10 @@ public class Player extends JComponent {
 			return false;
 		}
 		return true;
+	}
+
+	public int getDirection() {
+		return direction;
 	}
 
 	public boolean clearAbove() {
@@ -302,5 +284,10 @@ public class Player extends JComponent {
 
 	public BufferedImage getImage() {
 		return currentImage;
+	}
+
+	public void lose() {
+		// TODO Auto-generated method stub
+		System.out.println("YOU LOST BRO!");
 	}
 }

@@ -1,6 +1,5 @@
 package castlevania;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Skeleton extends Enemy {
@@ -12,13 +11,13 @@ public class Skeleton extends Enemy {
 			"spritesheets/enemy_two_spritesheet.png", WIDTH, HEIGHT,
 			SPRITEROWS, SPRITECOLS);
 
-	private BufferedImage oldImage, currentImage = sheet.getImage(0, 0);
+	private BufferedImage currentImage = sheet.getImage(0, 0);
 
 	private int counter = 0, xSprite = 0, ySprite = 0;
 
 	public boolean isPassive = true, isAttacking = false;
 
-	private final int RUNSPEED = 3, MOVESPEED = 2, attackDamage = 1; //Might change AD
+	private final int RUNSPEED = 3, MOVESPEED = 2; //Might change AD
 
 	public int direction = 1, velX, velY = 0, xOrigin;
 
@@ -44,12 +43,11 @@ public class Skeleton extends Enemy {
 	}
 
 	public BufferedImage changeImages() {
-		oldImage = currentImage;
 		counter++;
 
 		// Just sets Sprites and running Speeds.
 		if (counter >= 5) { // Should be 5
-
+			testCollision();
 			testAction();
 
 			if (isPassive) {
@@ -61,7 +59,6 @@ public class Skeleton extends Enemy {
 
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
-
 				if (Game.getPlayer().getX() < this.x) {
 					direction = -1;
 				} else {
@@ -76,9 +73,9 @@ public class Skeleton extends Enemy {
 			}
 			// System.out.println(direction);
 			if (direction == 1) {
-				currentImage = sheet.getImage(xSprite, ySprite);
-			} else {
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
+			} else {
+				currentImage = sheet.getImage(xSprite, ySprite);
 			}
 			counter = 0;
 		}
@@ -86,6 +83,19 @@ public class Skeleton extends Enemy {
 		this.y += velY;
 		return currentImage;
 	}
+
+	/*private void testCollision() {
+		// TODO Auto-generated method stub
+		Player player = Game.getPlayer();
+		int playerX = player.getX();
+		int playerY = player.getY();
+		
+		if ((Math.abs(this.x - playerX) <= player.getWIDTH())
+				&& (Math.abs(this.y - playerY) >= player.getHEIGHT()))
+		{
+			player.lose();
+		}
+	}*/
 
 	private void testAction() {
 		// If within attacking range of the player
