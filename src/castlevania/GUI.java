@@ -14,14 +14,14 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
-public class GUI extends JComponent {
+public class GUI extends JComponent implements Runnable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5908728103257773279L;
-	private ArrayList<Rectangle> playerHealthBar = new ArrayList<Rectangle>();
-	private int playerHealth;
+	private static ArrayList<Rectangle> playerHealthBar = new ArrayList<Rectangle>();
+	private static int playerHealth;
 
 	public GUI() {
 		for (int i = 0, x = 220; i < 10; i++, x += 18) {
@@ -29,7 +29,8 @@ public class GUI extends JComponent {
 			playerHealthBar.add(rect);
 		}
 		playerHealth = 10;
-		//repaint();
+		Thread t = new Thread(this);
+		t.start();
 	}
 
 	public void setPlayerHealth(int h)
@@ -67,5 +68,23 @@ public class GUI extends JComponent {
 			g2.fill(playerHealthBar.get(i));
 		}
 
+	}
+	
+	public static void removeRect(){
+		if(playerHealthBar.size() == 0 || playerHealth == 0){
+			System.out.println("GAME OVER.");
+			
+		}
+		else
+		{
+			playerHealth -= 1;
+			playerHealthBar.remove(playerHealthBar.size()-1);
+		}
+	}
+
+	@Override
+	public void run() {
+		removeRect();
+		
 	}
 }
