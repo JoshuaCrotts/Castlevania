@@ -11,16 +11,17 @@ public class Player extends JComponent {
 	private static final long serialVersionUID = -5471880502989465049L;
 	private static int counter = 0;
 	private BufferedImage currentImage, oldImage;
-	private int xSprite = 0, ySprite = 0, x, velx, y, vely, velyInit = 15, accel = -20, t = 0, health, direction = 1;
+	private int xSprite = 0, ySprite = 0, x, y, velx = 0, vely, velyInit = 15, accel = -20, t = 0, health, direction = 1,
+			attackTime = 5;
 	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10;
 	private SpriteSheet sheet;
 	private ArrayList<Item> items;
-	
-	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false, isSpacePressed = false;
+	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false;
 	
 	public Player(int x, int y) {
 		super();
 		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+		sheet.modifyRow(1, 2, 2*WIDTH, HEIGHT);
 		// currentImage = sheet.getImage(0, 0);
 		this.x = x;
 		this.y = y;
@@ -32,7 +33,7 @@ public class Player extends JComponent {
 	public BufferedImage changeImages() {
 		oldImage = currentImage;
 		counter++;
-		if (isSpacePressed) {
+/*		if (isSpacePressed) {
 			currentImage = sheet.getImage(0, 1);
 			if (direction == 1)
 				currentImage = (sheet.getImage(1, 1));
@@ -41,7 +42,7 @@ public class Player extends JComponent {
 
 			isSpacePressed = false;
 			return currentImage;
-		}
+		}*/
 		if (isJumping) { // This probably needs to go in the counter.
 			if (clearBelow() && clearAbove()) {
 				jump();
@@ -54,8 +55,27 @@ public class Player extends JComponent {
 		}
 
 		// Just sets Sprites and running Speeds.
-		if (counter >= 50) { // Should be 5
-			if (isJumping) {
+		if (counter >= 5) { // Should be 5
+			if (isAttacking) // This sprite is for when he's attacking.
+			{
+				System.out.println(attackTime);
+				xSprite = 1;
+				if (attackTime > 4)
+				{
+					ySprite = 0;
+					attackTime--;
+				}
+				else if (attackTime > 0) {
+					ySprite = 1;
+					attackTime--;
+				}
+				else
+				{
+					isAttacking = false;
+					attackTime = 5;
+				}
+			}
+			else if (isJumping) {
 				xSprite = 0;
 				ySprite = 5;
 			} else if (isStanding) {
@@ -74,29 +94,7 @@ public class Player extends JComponent {
 				} else {
 					ySprite = 0;
 				}
-			}
 
-			else if (isAttacking) // This sprite is for when he's attacking.
-			{
-				xSprite = 1; // Both of the attacks are in the same row.
-				if (isStanding) {
-					for (int i = 0; i < 2; i++) { // Also modified this tod
-													// appropriately change
-													// xSprite
-													// And ySprite instead of
-													// returning
-													// The image
-						if (ySprite == 0) {
-							ySprite = 1;
-						} else { // This will not work
-							ySprite = 0;
-						}
-					}
-				} else {
-					for (int i = 2; i < 4; i++) {
-						return sheet.getImage(1, i); // This will not work
-					}
-				}
 			}
 			// System.out.println(direction);
 			if (direction == 1) {

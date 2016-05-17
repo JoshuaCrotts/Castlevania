@@ -148,7 +148,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				whip1.play();
 				// g.drawImage(p.getSheet().getImage(0,1),p.getX(),p.getY(),
 				// null);
-				p.isSpacePressed = true;
+				p.isAttacking = true;
 				break;
 			}
 			if (aIsDown || dIsDown) {
