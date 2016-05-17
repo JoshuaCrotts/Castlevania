@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
-public class GUI extends JComponent implements Runnable{
+public class GUI extends JComponent{
 
 	/**
 	 * 
@@ -22,15 +22,13 @@ public class GUI extends JComponent implements Runnable{
 	private static final long serialVersionUID = -5908728103257773279L;
 	private static ArrayList<Rectangle> playerHealthBar = new ArrayList<Rectangle>();
 	private static int playerHealth;
-
+	private static int j = 0;
 	public GUI() {
 		for (int i = 0, x = 220; i < 10; i++, x += 18) {
 			Rectangle rect = new Rectangle(x, 43, 12, 30);
 			playerHealthBar.add(rect);
 		}
-		playerHealth = 10;
-		Thread t = new Thread(this);
-		t.start();
+		playerHealth = 1000;
 	}
 
 	public void setPlayerHealth(int h)
@@ -63,7 +61,7 @@ public class GUI extends JComponent implements Runnable{
 		g2.setColor(Color.BLACK);
 		g2.setFont(customFont);
 		g2.drawString("HEALTH:", 15, 68);
-		for (int i = 0; i < playerHealth; i++) {
+		for (int i = 0; i < playerHealthBar.size(); i++) {
 			g2.setColor(Color.RED);
 			g2.fill(playerHealthBar.get(i));
 		}
@@ -71,17 +69,16 @@ public class GUI extends JComponent implements Runnable{
 	
 	public static void removeRect(){
 		if(playerHealthBar.size() == 0 || playerHealth == 0){
-			Game.getPlayer().lose();	
+			Game.setIsDead(true);
 		}
 		else
 		{
-			playerHealth -= 1;
-			playerHealthBar.remove(playerHealthBar.size()-1);
+			
+			playerHealth -= 10;
+			System.out.println("Player health:" + playerHealth+" Bar Size: "+playerHealthBar.size());
+			if(playerHealth % 100 == 0){
+				j -= 1;
+				playerHealthBar.remove(playerHealthBar.size()-1);}
 		}
-	}
-
-	public void run() {
-		removeRect();
-		
 	}
 }

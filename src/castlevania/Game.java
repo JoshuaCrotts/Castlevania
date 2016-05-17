@@ -20,7 +20,16 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private GUI gui;
 	private boolean aIsDown = false, wIsDown = false, sIsDown = false,
 			dIsDown = false;
-
+	static boolean isDead = false;
+	
+	public static boolean getIsDead(){
+		return isDead;
+	}
+	
+	public static void setIsDead(boolean b){
+		isDead = b;
+	}
+	
 	private Image dbImage;
 	private Graphics dbg;
 	private boolean stillGoing = true;
@@ -304,6 +313,40 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		if (!isLevelOneDone) {// Basically, if the first level isn't done it's
 			// gonna do this if statement only.
 			levels[0].play();// plays the music for the first level
+			
+			if(isDead){
+				levels[0].getMusic().stop();
+				Audio ad = new Audio("soundeffects/lostlife.wav");
+				ad.play();
+				Game.p.setBImage(Game.p.getSheet().getImage(0, 0));
+				try {
+					Thread.sleep(300);
+					g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
+							this);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Game.p.setBImage(Game.p.getSheet().getImage(3, 1));
+				try {
+					Thread.sleep(300);
+					g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
+							this);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Game.p.setBImage(Game.p.getSheet().getImage(3, 2));
+				try {
+					Thread.sleep(300);
+					g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
+							this);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.exit(0);
+			}
 			if ((p.getX() - levels[0].getX() <= 0) && stillGoing) // this if
 				// statement
 				// says if
@@ -409,6 +452,12 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			if (stillGoing)
 				gui.paintComponent(g);// if the game is still going, it repaints
 			// the gui
+			
+			/*
+			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+				if((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX()) <= (p.attackRange * p.getDirection())){
+					levels[levelNumber].getEnemyArrayList().get(i).setVisible(false);}
+			}*/
 		}
 
 

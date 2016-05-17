@@ -17,10 +17,11 @@ public class Player extends JComponent {
 	private SpriteSheet sheet;
 	private ArrayList<Item> items;
 	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false;
+	public int attackRange = 1;
 	
 	public Player(int x, int y) {
 		super();
-		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet_with_fixed_whip.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 		sheet.modifyRow(1, 2, 2*WIDTH, HEIGHT);
 		// currentImage = sheet.getImage(0, 0);
 		this.x = x;
@@ -283,6 +284,10 @@ public class Player extends JComponent {
 
 	public BufferedImage getImage() {
 		return currentImage;
+	}
+	
+	public void setBImage(BufferedImage image){
+		this.currentImage = image;
 	}
 
 	public boolean intersects(int enemyX){
