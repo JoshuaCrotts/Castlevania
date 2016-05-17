@@ -7,6 +7,15 @@ public class Skeleton extends Enemy {
 	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2,
 			RANGE = 100, ATTACKRANGE = 300;
 
+	private int health = 2;
+	
+	public int getHealth(){
+		return health;
+	}
+	
+	public void setHealth(int h){
+		this.health = h;
+	}
 	static SpriteSheet sheet = new SpriteSheet(
 			"spritesheets/enemy_two_spritesheet.png", WIDTH, HEIGHT,
 			SPRITEROWS, SPRITECOLS);

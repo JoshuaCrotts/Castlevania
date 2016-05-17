@@ -59,7 +59,7 @@ public class Player extends JComponent {
 		if (counter >= 5) { // Should be 5
 			if (isAttacking) // This sprite is for when he's attacking.
 			{
-				System.out.println(attackTime);
+				//System.out.println(attackTime);
 				xSprite = 1;
 				if (attackTime > 4)
 				{

@@ -11,6 +11,7 @@ public abstract class Enemy extends Entity {
 	protected final int WIDTH;
 	protected final int HEIGHT;
 	protected SpriteSheet SHEET;
+	private int health = 2;
 	
 	private int attackDamage;
 	
@@ -45,6 +46,13 @@ public abstract class Enemy extends Entity {
 
 	public abstract BufferedImage getImage();
 	
+	public int getHealth(){
+		return health;
+	}
+	
+	public void setHealth(int h){
+		this.health = h;
+	}
 	public int getX() {
 		return x;
 	}

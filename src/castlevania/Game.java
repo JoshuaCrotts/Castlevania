@@ -108,7 +108,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-				Thread.sleep(17L); // 17L
+				Thread.sleep(25L); // 17L
 				// repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -419,6 +419,15 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			// }
 
+			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+				if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX()+128)) <= 250) && p.isAttacking){
+					if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0)
+						levels[levelNumber].getEnemyArrayList().remove(i);
+					else
+						levels[levelNumber].getEnemyArrayList().get(i).setHealth(levels[levelNumber].getEnemyArrayList().get(i).getHealth()-1);
+				}
+			}
+			
 			// checks if aggressive or naw
 			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
 				Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
@@ -453,11 +462,10 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				gui.paintComponent(g);// if the game is still going, it repaints
 			// the gui
 			
-			/*
-			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
-				if((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX()) <= (p.attackRange * p.getDirection())){
-					levels[levelNumber].getEnemyArrayList().get(i).setVisible(false);}
-			}*/
+			if(levels[levelNumber].getEnemyAmount() != 0)
+			System.out.println("Position: " +Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getX() - (p.getX() + 128)));
+			System.out.println("Is attacking: "+p.isAttacking );
+
 		}
 
 
