@@ -15,8 +15,9 @@ public class Player extends JComponent {
 	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10;
 	private SpriteSheet sheet;
 	private ArrayList<Item> items;
+	
 	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false, isSpacePressed = false;
-
+	
 	public Player(int x, int y) {
 		super();
 		sheet = new SpriteSheet("spritesheets/belmont_sprite_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
@@ -53,7 +54,7 @@ public class Player extends JComponent {
 		}
 
 		// Just sets Sprites and running Speeds.
-		if (counter >= 5) { // Should be 5
+		if (counter >= 50) { // Should be 5
 			if (isJumping) {
 				xSprite = 0;
 				ySprite = 5;

@@ -54,6 +54,14 @@ public class SpriteSheet {
         return createTransformed(image, at);
     }
 
+	public void modifyRow(int row, int cols, int width, int height)
+	{
+		int y = row * height;
+		for (int i = 0, x = 0; i < cols; i++, x += width)
+		{
+			images[row][i] = spriteSheet.getSubimage(x, y, width, height);
+		}
+	}
 	
 	private static BufferedImage createTransformed(
 	        BufferedImage image, AffineTransform at)

@@ -67,13 +67,11 @@ public class GUI extends JComponent implements Runnable{
 			g2.setColor(Color.RED);
 			g2.fill(playerHealthBar.get(i));
 		}
-
 	}
 	
 	public static void removeRect(){
 		if(playerHealthBar.size() == 0 || playerHealth == 0){
-			System.out.println("GAME OVER.");
-			
+			Game.getPlayer().lose();	
 		}
 		else
 		{
@@ -82,7 +80,6 @@ public class GUI extends JComponent implements Runnable{
 		}
 	}
 
-	@Override
 	public void run() {
 		removeRect();
 		
