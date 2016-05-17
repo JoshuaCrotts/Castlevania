@@ -12,7 +12,7 @@ public class Player extends JComponent {
 	private static int counter = 0;
 	private BufferedImage currentImage, oldImage;
 	private int xSprite = 0, ySprite = 0, x, velx, y, vely, velyInit = 15, accel = -20, t = 0, health, direction = 1;
-	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 40;
+	private final int SPRITEROWS = 4, SPRITECOLS = 6, WIDTH = 128, HEIGHT = 128, RUNSPEED = 10;
 	private SpriteSheet sheet;
 	private ArrayList<Item> items;
 	public boolean isRunning = false, isAttacking = false, isStanding = true, isJumping = false, isSpacePressed = false;
@@ -31,7 +31,7 @@ public class Player extends JComponent {
 	public BufferedImage changeImages() {
 		oldImage = currentImage;
 		counter++;
-		/*if (isSpacePressed) {
+		if (isSpacePressed) {
 			currentImage = sheet.getImage(0, 1);
 			if (direction == 1)
 				currentImage = (sheet.getImage(1, 1));
@@ -40,7 +40,7 @@ public class Player extends JComponent {
 
 			isSpacePressed = false;
 			return currentImage;
-		}*/
+		}
 		if (isJumping) { // This probably needs to go in the counter.
 			if (clearBelow() && clearAbove()) {
 				jump();
@@ -79,7 +79,7 @@ public class Player extends JComponent {
 			{
 				xSprite = 1; // Both of the attacks are in the same row.
 				if (isStanding) {
-					for (int i = 0; i < 2; i++) { // Also modified this to
+					for (int i = 0; i < 2; i++) { // Also modified this tod
 													// appropriately change
 													// xSprite
 													// And ySprite instead of
@@ -286,8 +286,14 @@ public class Player extends JComponent {
 		return currentImage;
 	}
 
+	public boolean intersects(int enemyX){
+		if(getX() == enemyX)return true;
+		return false;
+	}
 	public void lose() {
 		// TODO Auto-generated method stub
-		System.out.println("YOU LOST BRO!");
+		GUI.removeRect();
+		
+
 	}
 }

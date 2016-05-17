@@ -287,11 +287,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
 			Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
 			temp.changeImages();
-			g.drawImage(temp.getImage(),
-					temp.getX() - levels[levelNumber].getX(), HEIGHT - 128,
-					null);
 		}
-		
 		p.changeImages();
 		//Draws player
 		g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
