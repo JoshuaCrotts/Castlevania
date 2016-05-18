@@ -109,7 +109,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		while (running) {
 			try {
 				repaint();
-				Thread.sleep(25L); // 17L
+				Thread.sleep(17L); // 17L
 				// repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -315,6 +315,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			// gonna do this if statement only.
 			levels[0].play();// plays the music for the first level
 			
+			//BRANDON FIX THIS. WHY IS IT NOT SWAPPING THE IMAGES???????????????????????????????????
 			if(isDead){
 				levels[0].getMusic().stop();
 				Audio ad = new Audio("soundeffects/lostlife.wav");
@@ -420,9 +421,11 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			// }
 
+			//DEDUCTS HEALTH FROM ENEMIES
 			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
 				if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX()+128)) <= 250) && p.isAttacking){
 					if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0)
+						//g.drawImage(IMAGEOFPOOF, levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getX(),this);
 						levels[levelNumber].getEnemyArrayList().remove(i);
 					else
 						levels[levelNumber].getEnemyArrayList().get(i).setHealth(levels[levelNumber].getEnemyArrayList().get(i).getHealth()-1);
@@ -464,8 +467,9 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			// the gui
 			
 			if(levels[levelNumber].getEnemyAmount() != 0)
-			System.out.println("Position: " +Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getX() - (p.getX() + 128)));
-			System.out.println("Is attacking: "+p.isAttacking );
+			//System.out.println("Position: " +Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getX() - (p.getX() + 128)));
+			//System.out.println("Is attacking: "+p.isAttacking );
+			System.out.println("HEALTH: "+levels[levelNumber].getEnemyArrayList().get(0).getHealth());
 
 		}
 
@@ -632,7 +636,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		// addE(level,new Ghoul(100, HEIGHT - 128));
 		// addE(level,new Ghoul(200, HEIGHT - 128));
 		// addE(level,new Ghoul(900, HEIGHT - 128));
-		//addE(level, new Skeleton(1250, HEIGHT - 128));
+		 //  addE(level, new Knight(1250, HEIGHT - 128));
 		// addE(level,new Skeleton(1250, HEIGHT-128));
 		// addE(level,new Knight(2000,HEIGHT-128));
 		

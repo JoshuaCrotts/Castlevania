@@ -11,9 +11,9 @@ public abstract class Enemy extends Entity {
 	protected final int WIDTH;
 	protected final int HEIGHT;
 	protected SpriteSheet SHEET;
-	private int health = 2;
+	private int health;
 	
-	private int attackDamage;
+	//private int attackDamage;
 	
 	public Enemy(int x, int y, int WIDTH, int HEIGHT, SpriteSheet sheet)
 	{

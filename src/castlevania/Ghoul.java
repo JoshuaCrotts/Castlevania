@@ -20,7 +20,7 @@ public class Ghoul extends Enemy {
 
 	public boolean isPassive = true, isAttacking = true;
 
-	private int attackDamage;
+	private int health = 2;
 
 	private final int RUNSPEED = 8, MOVESPEED = 2;
 
@@ -29,6 +29,7 @@ public class Ghoul extends Enemy {
 	public Ghoul(int x, int y) {
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
+		this.health = 2;
 	}
 
 	public int getX() {
@@ -152,6 +153,14 @@ public class Ghoul extends Enemy {
 
 	public int getDirection() {
 		return direction;
+	}
+	
+	public void setHealth(int health){
+		this.health = health;
+	}
+	
+	public int getHealth(){
+		return health;
 	}
 
 }

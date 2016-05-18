@@ -7,21 +7,14 @@ public class Skeleton extends Enemy {
 	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2,
 			RANGE = 100, ATTACKRANGE = 300;
 
-	private int health = 2;
-	
-	public int getHealth(){
-		return health;
-	}
-	
-	public void setHealth(int h){
-		this.health = h;
-	}
 	static SpriteSheet sheet = new SpriteSheet(
 			"spritesheets/enemy_two_spritesheet.png", WIDTH, HEIGHT,
 			SPRITEROWS, SPRITECOLS);
 
 	private BufferedImage currentImage = sheet.getImage(0, 0);
 
+	private int health = 20;
+	
 	private int counter = 0, xSprite = 0, ySprite = 0;
 
 	public boolean isPassive = true, isAttacking = false;
@@ -33,6 +26,7 @@ public class Skeleton extends Enemy {
 	public Skeleton(int x, int y) {
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
+		this.health = 30;
 	}
 
 	public int getX() {
@@ -170,5 +164,13 @@ public class Skeleton extends Enemy {
 
 	public int getDirection() {
 		return direction;
+	}
+	
+	public void setHealth(int health){
+		this.health = health;
+	}
+	
+	public int getHealth(){
+		return health;
 	}
 }
