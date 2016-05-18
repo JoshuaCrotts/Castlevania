@@ -8,6 +8,8 @@ public class Ghoul extends Enemy {
 	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2,
 			RANGE = 100;
 
+	final static int ATTACKRANGE = 120;
+	
 	private static SpriteSheet sheet = new SpriteSheet(
 			"spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT,
 			SPRITEROWS, SPRITECOLS);
@@ -50,18 +52,18 @@ public class Ghoul extends Enemy {
 
 		// Just sets Sprites and running Speeds.
 		if (counter >= 5) { // Should be 5
-			if (changeDirectionOrNaw())
-				direction *= -1;
-
+			testCollision();
 			testAction();
 
+
 			if (isPassive) {
+				if (changeDirectionOrNaw())
+					direction *= -1;
 				setVelx(MOVESPEED * direction);
 			}
 
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
-
 				if (Game.getPlayer().getX() < this.x) {
 					direction = -1;
 				} else {
@@ -89,6 +91,13 @@ public class Ghoul extends Enemy {
 
 	private void testAction() {
 		// Have this test the player's position and the ghoul's
+		if (Math.abs(Game.getPlayer().getX() - this.x) <= ATTACKRANGE) {
+			this.isPassive = false;
+			this.isAttacking = true;
+		} else {
+			this.isPassive = true;
+			this.isAttacking = false;
+		}
 	}
 
 	private boolean changeDirectionOrNaw() {

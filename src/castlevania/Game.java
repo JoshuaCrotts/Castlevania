@@ -5,7 +5,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.FileNotFoundException;
+import java.util.Random;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -631,9 +632,22 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		// addE(level,new Ghoul(100, HEIGHT - 128));
 		// addE(level,new Ghoul(200, HEIGHT - 128));
 		// addE(level,new Ghoul(900, HEIGHT - 128));
-		addE(level, new Skeleton(1250, HEIGHT - 128));
+		//addE(level, new Skeleton(1250, HEIGHT - 128));
 		// addE(level,new Skeleton(1250, HEIGHT-128));
 		// addE(level,new Knight(2000,HEIGHT-128));
+		
+		Random randomInt = new Random();
+		int enemyChooser = 1+randomInt.nextInt(3);
+		
+		for(int i = 0; i<15; i++){
+			switch(enemyChooser){
+			
+			case 1: addE(level, new Ghoul(300+randomInt.nextInt(7170), HEIGHT-128));
+			case 2: addE(level, new Skeleton(300+randomInt.nextInt(7170), HEIGHT-128));
+			case 3: addE(level, new Knight(300+randomInt.nextInt(7170), HEIGHT-128));
+			}
+			enemyChooser = 1+randomInt.nextInt(3);
+		}
 	}
 
 	public void addEnemiesToFrame(int level) {
