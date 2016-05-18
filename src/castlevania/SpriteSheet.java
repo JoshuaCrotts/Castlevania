@@ -60,6 +60,7 @@ public class SpriteSheet {
 		for (int i = 0, x = 0; i < cols; i++, x += width)
 		{
 			images[row][i] = spriteSheet.getSubimage(x, y, width, height);
+			flippedImages[row][i] = createFlipped(createRotated(spriteSheet.getSubimage(x, y, width, height)));
 		}
 	}
 	
