@@ -5,8 +5,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -44,6 +50,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	public boolean isLevelThreeDone = false;
 
 	public static int levelNumber = 0;
+
+	public static int isDeadCounter = 0;
 
 	public static int getLevelNumber() {
 		return levelNumber;
@@ -211,7 +219,12 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		dbImage = createImage(getWIDTH(), getHEIGHT());
 		dbg = dbImage.getGraphics();
 
-		paintComponent(dbg);
+		try {
+			paintComponent(dbg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		g.drawImage(dbImage, 0, 0, this);
 	}
 
@@ -306,7 +319,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			gui.paintComponent(g);
 	}
 
-	public void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) throws IOException {
 		
 		//paintLevel(g);
 		
@@ -320,29 +333,31 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				levels[0].getMusic().stop();
 				Audio ad = new Audio("soundeffects/lostlife.wav");
 				ad.play();
-				Game.p.setBImage(Game.p.getSheet().getImage(0, 0));
+				Game.isDeadCounter =0;
+				p.changeImages();
 				try {
-					Thread.sleep(300);
-					g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
-							this);
+					g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),null);
+					System.out.println(Game.isDeadCounter);
+					Thread.sleep(700);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Game.p.setBImage(Game.p.getSheet().getImage(3, 1));
+				
+				p.changeImages();
 				try {
-					Thread.sleep(300);
-					g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
-							this);
+					g.drawImage(p.getImage(), p.getX()-levels[0].getX(), p.getY(),null);
+					System.out.println(Game.isDeadCounter);
+					Thread.sleep(700);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				Game.p.setBImage(Game.p.getSheet().getImage(3, 2));
+				p.changeImages();
 				try {
-					Thread.sleep(300);
-					g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
-							this);
+					g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),null);
+					System.out.println(Game.isDeadCounter);
+					Thread.sleep(700);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -424,9 +439,10 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			//DEDUCTS HEALTH FROM ENEMIES
 			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
 				if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX()+128)) <= 250) && p.isAttacking){
-					if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0)
-						//g.drawImage(IMAGEOFPOOF, levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getX(),this);
-						levels[levelNumber].getEnemyArrayList().remove(i);
+					if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0){
+						Image icon = ImageIO.read(new File("images/smoke_up.gif"));
+						g.drawImage(icon, levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
+						levels[levelNumber].getEnemyArrayList().remove(i);}
 					else
 						levels[levelNumber].getEnemyArrayList().get(i).setHealth(levels[levelNumber].getEnemyArrayList().get(i).getHealth()-1);
 				}

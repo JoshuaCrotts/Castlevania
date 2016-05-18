@@ -44,6 +44,25 @@ public class Player extends JComponent {
 			isSpacePressed = false;
 			return currentImage;
 		}*/
+		
+		if(Game.isDead){
+			
+			if(Game.isDeadCounter == 0){
+				Game.isDeadCounter += 1;
+				return sheet.getImage(0, 0);
+			}
+				
+			
+			if(Game.isDeadCounter == 1 ){
+				Game.isDeadCounter += 1;
+				return sheet.getImage(2, 2);
+
+			}
+			if(Game.isDeadCounter == 2){
+				Game.isDeadCounter = 0;
+				return sheet.getImage(3, 2);
+			}
+		}
 		if (isJumping) { // This probably needs to go in the counter.
 			if (clearBelow() && clearAbove()) {
 				jump();
@@ -59,7 +78,7 @@ public class Player extends JComponent {
 		if (counter >= 5) { // Should be 5
 			if (isAttacking) // This sprite is for when he's attacking.
 			{
-				//System.out.println(attackTime);
+				System.out.println(attackTime);
 				xSprite = 1;
 				if (attackTime > 4)
 				{
