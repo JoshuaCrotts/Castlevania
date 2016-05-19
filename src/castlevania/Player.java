@@ -55,7 +55,7 @@ public class Player extends JComponent {
 			
 			if(Game.isDeadCounter == 1 ){
 				Game.isDeadCounter += 1;
-				return sheet.getImage(2, 2);
+				return sheet.getImage(3, 1);
 
 			}
 			if(Game.isDeadCounter == 2){

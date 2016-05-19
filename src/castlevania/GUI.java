@@ -81,4 +81,5 @@ public class GUI extends JComponent{
 				playerHealthBar.remove(playerHealthBar.size()-1);}
 		}
 	}
+	
 }

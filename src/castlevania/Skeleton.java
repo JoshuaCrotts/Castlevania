@@ -13,7 +13,7 @@ public class Skeleton extends Enemy {
 
 	private BufferedImage currentImage = sheet.getImage(0, 0);
 
-	private int health = 20;
+	private int health = 10;
 	
 	private int counter = 0, xSprite = 0, ySprite = 0;
 
@@ -26,7 +26,7 @@ public class Skeleton extends Enemy {
 	public Skeleton(int x, int y) {
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
-		this.health = 30;
+		this.health = 10;
 	}
 
 	public int getX() {

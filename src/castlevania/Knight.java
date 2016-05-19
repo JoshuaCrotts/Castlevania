@@ -15,7 +15,7 @@ public class Knight extends Enemy{
 	
 	private int counter = 0, xSprite = 0, ySprite = 0, turningPoint;
 	
-	private int health = 60;
+	private int health = 20;
 	
 	public boolean isPassive = true, isAttacking = true;
 	
@@ -29,7 +29,7 @@ public class Knight extends Enemy{
 	{
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
-		this.health = 60;
+		this.health = 20;
 	}
 	public int getX(){
 		return this.x;

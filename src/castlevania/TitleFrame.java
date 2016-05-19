@@ -73,7 +73,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 		
 		final JButton help = new JButton();
 		help.setBackground(Color.WHITE);
-		help.setText("<html>To Play The Game, All You Must Do Is Survive.<br /><br />Use The Space Bar to Attack, <br /><br>W to Jump, A and D To Move Left And Right.<br ><br>Press this Message Box to Continue.<br/></html>");
+		help.setText("<html>To Play The Game, All You Must Do Is Survive.<br /><br />Use The Space Bar to Attack, <br /><br>W to Jump, A and D To Move Left And Right.</html>");
 		help.setFont(customFont);
 		help.setSize(800,200);
 		help.setLocation(30, 200); 
