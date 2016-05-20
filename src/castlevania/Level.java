@@ -22,7 +22,7 @@ public class Level extends JComponent{
 	private ArrayList<Entity> obstacles;
 	private ArrayList<Enemy> enemies;
 	private Graphics g;
-
+	
 
 	public Level(String level, Audio music)
 	{

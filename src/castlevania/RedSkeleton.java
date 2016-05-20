@@ -1,35 +1,32 @@
 package castlevania;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public class Ghoul extends Enemy {
+public class RedSkeleton extends Skeleton {
 
 	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2,
-			RANGE = 100;
+			RANGE = 300, ATTACKRANGE = 300;
 
-	final static int ATTACKRANGE = 120;
-	
-	private static SpriteSheet sheet = new SpriteSheet(
-			"spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT,
+	static SpriteSheet sheet = new SpriteSheet(
+			"spritesheets/red_skeleton_sheet.png", WIDTH, HEIGHT,
 			SPRITEROWS, SPRITECOLS);
 
 	private BufferedImage currentImage = sheet.getImage(0, 0);
 
+	private int health = 1000;
+	
 	private int counter = 0, xSprite = 0, ySprite = 0;
 
-	public boolean isPassive = true, isAttacking = true;
+	public boolean isPassive = true, isAttacking = false;
 
-	private int health = 2;
-
-	private final int RUNSPEED = 8, MOVESPEED = 2;
+	private final int RUNSPEED = 4, MOVESPEED = 2; //Might change AD
 
 	public int direction = 1, velX, velY = 0, xOrigin;
 
-	public Ghoul(int x, int y) {
-		super(x, y, WIDTH, HEIGHT, sheet);
+	public RedSkeleton(int x, int y) {
+		super(x, y);
 		this.xOrigin = x;
-		this.health = 2;
+		this.health = 10000;
 	}
 
 	public int getX() {
@@ -56,10 +53,10 @@ public class Ghoul extends Enemy {
 			testCollision();
 			testAction();
 
-
 			if (isPassive) {
 				if (changeDirectionOrNaw())
 					direction *= -1;
+				
 				setVelx(MOVESPEED * direction);
 			}
 
@@ -79,9 +76,9 @@ public class Ghoul extends Enemy {
 			}
 			// System.out.println(direction);
 			if (direction == 1) {
-				currentImage = sheet.getImage(xSprite, ySprite);
-			} else {
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
+			} else {
+				currentImage = sheet.getImage(xSprite, ySprite);
 			}
 			counter = 0;
 		}
@@ -90,8 +87,22 @@ public class Ghoul extends Enemy {
 		return currentImage;
 	}
 
+	/*private void testCollision() {
+		// TODO Auto-generated method stub
+		Player player = Game.getPlayer();
+		int playerX = player.getX();
+		int playerY = player.getY();
+		
+		if ((Math.abs(this.x - playerX) <= player.getWIDTH())
+				&& (Math.abs(this.y - playerY) >= player.getHEIGHT()))
+		{
+			player.lose();
+		}
+	}*/
+
 	private void testAction() {
-		// Have this test the player's position and the ghoul's
+		// If within attacking range of the player
+		System.out.println(Math.abs(Game.getPlayer().getX() - this.x));
 		if (Math.abs(Game.getPlayer().getX() - this.x) <= ATTACKRANGE) {
 			this.isPassive = false;
 			this.isAttacking = true;
@@ -106,9 +117,9 @@ public class Ghoul extends Enemy {
 		 * Tests if the difference between the enemy's x-Coordinate and Origin
 		 * would be closer to the origin with or without the direction added.
 		 */
-		if ((Math.abs(this.x - xOrigin) < (Math.abs((this.x + direction)
-				- xOrigin)) && outsideRange())
-				&& !isAttacking && isPassive) {
+		if (Math.abs(this.x - xOrigin) < (Math.abs((this.x + direction)
+				- xOrigin))
+				&& outsideRange()) {
 			return true;
 		}
 		return false;
@@ -133,22 +144,22 @@ public class Ghoul extends Enemy {
 		return currentImage;
 	}
 
-	public boolean isAttacking() {
-		return isAttacking();
-	}
-
 	@Override
 	public void setIsAttacking(boolean b) {
 		this.isAttacking = b;
+
+	}
+
+	public void setIsPassive(boolean p) {
+		this.isPassive = p;
 	}
 
 	public boolean isPassive() {
 		return isPassive;
 	}
 
-	@Override
-	public void setIsPassive(boolean p) {
-		this.isPassive = p;
+	public boolean isAttacking() {
+		return isAttacking;
 	}
 
 	public int getDirection() {
@@ -162,5 +173,4 @@ public class Ghoul extends Enemy {
 	public int getHealth(){
 		return health;
 	}
-
 }

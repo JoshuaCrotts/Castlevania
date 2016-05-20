@@ -28,6 +28,8 @@ public class TitleFrame extends JFrame implements ActionListener{
 	public JFrame tFrame;
 	public TitleFrame()
 	{
+		Audio m1 = new Audio("music/menumusic.wav");
+		m1.play();
 		Font customFont = null;
 		try {
 			customFont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/oldschool.ttf")).deriveFont(48f);
@@ -102,6 +104,41 @@ public class TitleFrame extends JFrame implements ActionListener{
 		} catch(FontFormatException e) {
 			e.printStackTrace();
 		}
+		//easy
+		final JButton easy = new JButton();
+		easy.setBackground(Color.WHITE);
+		easy.setText("EASY");
+		easy.setFont(customFont);
+		easy.setSize(300,200);
+		easy.setLocation(80, 210); 
+		easy.setOpaque(false);
+		easy.setVisible(false);
+		easy.setContentAreaFilled(false);
+		easy.setBorderPainted(false);
+		
+		//med
+		final JButton med = new JButton();
+		med.setBackground(Color.WHITE);
+		med.setText("MEDIUM");
+		med.setFont(customFont);
+		med.setSize(300,200);
+		med.setLocation(240, 210); 
+		med.setOpaque(false);
+		med.setVisible(false);
+		med.setContentAreaFilled(false);
+		med.setBorderPainted(false);
+		
+		//hard
+		final JButton hard = new JButton();
+		hard.setBackground(Color.WHITE);
+		hard.setText("HARD");
+		hard.setFont(customFont);
+		hard.setSize(300,200);
+		hard.setLocation(400, 210); 
+		hard.setOpaque(false);
+		hard.setVisible(false);
+		hard.setContentAreaFilled(false);
+		hard.setBorderPainted(false);
 		
 		final JButton exit = new JButton();
 		exit.setBackground(Color.WHITE);
@@ -113,24 +150,71 @@ public class TitleFrame extends JFrame implements ActionListener{
 		exit.setVisible(true);
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
-		
+
 		tFrame.getContentPane().add(play);
 		tFrame.getContentPane().add(help);
 		tFrame.getContentPane().add(madeBy);
 		tFrame.getContentPane().add(exit);
+		tFrame.getContentPane().add(easy);
+		tFrame.getContentPane().add(med);
+		tFrame.getContentPane().add(hard);
 		
 
 	    JLabel background = new JLabel(new ImageIcon("images/Castlevania_logo_color.png"));
 	    background.setLayout(new BorderLayout());
 	    tFrame.getContentPane().add(background);
 		
+		easy.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				Audio a = new Audio("soundeffects/menuselect.wav");
+				a.play();
+				Game.difficulty = 0;
+				med.setVisible(false);
+				hard.setVisible(false);
+				easy.setVisible(false);
+				help.setVisible(true);
+				exit.setVisible(false);
+				
+			}
+		});
+		
+		med.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				Audio a = new Audio("soundeffects/menuselect.wav");
+				a.play();
+				Game.difficulty = 1;
+				med.setVisible(false);
+				hard.setVisible(false);
+				easy.setVisible(false);
+				help.setVisible(true);
+				exit.setVisible(false);
+				
+			}
+		});
+		
+		hard.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				Audio a = new Audio("soundeffects/menuselect.wav");
+				a.play();
+				Game.difficulty = 2;
+				med.setVisible(false);
+				hard.setVisible(false);
+				easy.setVisible(false);
+				help.setVisible(true);
+				exit.setVisible(false);
+				
+			}
+		});
+	    
 		play.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				Audio a = new Audio("soundeffects/menuselect.wav");
 				a.play();
 				play.setVisible(false);
-				help.setVisible(true);
 				exit.setVisible(false);
+				easy.setVisible(true);
+				med.setVisible(true);
+				hard.setVisible(true);
 				
 			}
 		});
@@ -139,18 +223,20 @@ public class TitleFrame extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e){
 				Audio a = new Audio("soundeffects/menuselect.wav");
 				a.play();
+				m1.stop();
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
 				help.setVisible(false);
-				try{
-				a = new Audio("music/frontgates.wav");
-				//a.play();
-				//Thread.sleep(7500);
-				}catch(Exception ex){ex.printStackTrace();}
+			//	try{
+			//	a = new Audio("music/frontgates.wav");
+			//	a.play();
+			//	Thread.sleep(7500);
+			//	}catch(Exception ex){ex.printStackTrace();}
 				Game.shouldShow = true;
 				tFrame.setVisible(false);
 			}
@@ -158,6 +244,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 		
 		exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
+				
 				Audio a = new Audio("soundeffects/menuselect.wav");
 				a.play();
 				try {

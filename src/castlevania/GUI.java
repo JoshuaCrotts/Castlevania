@@ -14,22 +14,23 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
-public class GUI extends JComponent {
+public class GUI extends JComponent{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5908728103257773279L;
-	private ArrayList<Rectangle> playerHealthBar = new ArrayList<Rectangle>();
-	private int playerHealth;
-
+	private static ArrayList<Rectangle> playerHealthBar = new ArrayList<Rectangle>();
+	private static ArrayList<Rectangle> bossHealthBar = new ArrayList<Rectangle>();
+	private static int playerHealth;
+	private static int j = 0;
+	private static int k = 0;
 	public GUI() {
 		for (int i = 0, x = 220; i < 10; i++, x += 18) {
 			Rectangle rect = new Rectangle(x, 43, 12, 30);
 			playerHealthBar.add(rect);
 		}
-		playerHealth = 10;
-		//repaint();
+		playerHealth = 1000;
 	}
 
 	public void setPlayerHealth(int h)
@@ -62,10 +63,53 @@ public class GUI extends JComponent {
 		g2.setColor(Color.BLACK);
 		g2.setFont(customFont);
 		g2.drawString("HEALTH:", 15, 68);
-		for (int i = 0; i < playerHealth; i++) {
+		for (int i = 0; i < playerHealthBar.size(); i++) {
 			g2.setColor(Color.RED);
 			g2.fill(playerHealthBar.get(i));
 		}
-
 	}
+	
+	public static void removeRect(){
+		if(playerHealthBar.size() == 0 || playerHealth == 0){
+			Game.setIsDead(true);
+		}
+		else
+		{
+			
+			playerHealth -= 10;
+			System.out.println("Player health:" + playerHealth+" Bar Size: "+playerHealthBar.size());
+			if(playerHealth % 100 == 0){
+				j -= 1;
+				playerHealthBar.remove(playerHealthBar.size()-1);}
+		}
+	}
+	
+	public void addBossBar(Graphics g){
+		Graphics2D g2 = (Graphics2D) g;
+		for (int i = 0, x = 440; i < 10; i++, x += 18) {
+			Rectangle rect = new Rectangle(x, 43, 12, 30);
+			bossHealthBar.add(rect);
+		}
+		for(int i = 0; i<bossHealthBar.size(); i++){
+			g2.fill(bossHealthBar.get(i));
+		}
+		Game.getRedSkeleton().setHealth(2000);
+		}
+	
+	public static void removeEnemyRect(){
+		if(playerHealthBar.size() == 0 || playerHealth == 0){
+			System.out.println("YOU WIN");
+			System.exit(0);
+		}
+		else
+		{
+			
+			Game.getRedSkeleton().setHealth(Game.getRedSkeleton().getHealth()-10);
+			System.out.println("Enemy health:" + playerHealth+" Bar Size: "+playerHealthBar.size());
+			if(Game.getRedSkeleton().getHealth() % 200 == 0){
+				playerHealthBar.remove(k);
+				k++;}
+		}
+	}
+	
 }

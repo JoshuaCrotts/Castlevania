@@ -1,50 +1,56 @@
 package castlevania;
 
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
-public class Skeleton extends Enemy {
-
-	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2,
-			RANGE = 100, ATTACKRANGE = 300;
-
-	static SpriteSheet sheet = new SpriteSheet(
-			"spritesheets/enemy_two_spritesheet.png", WIDTH, HEIGHT,
-			SPRITEROWS, SPRITECOLS);
-
-	private BufferedImage currentImage = sheet.getImage(0, 0);
-
-	private int health = 10;
+public class Julius extends Boss{
 	
-	private int counter = 0, xSprite = 0, ySprite = 0;
-
-	public boolean isPassive = true, isAttacking = false;
-
-	private final int RUNSPEED = 3, MOVESPEED = 2; //Might change AD
-
+	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 4, SPRITECOLS = 5, RANGE = 200;
+	
+	final static int ATTACKRANGE = 200;
+	
+	private int x, y, velx = 0, vely, velyInit = 15, accel = -20, t = 0;
+	
+	static SpriteSheet sheet = new SpriteSheet("spritesheets/julius_belmont_sheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
+	
+	private BufferedImage oldImage, currentImage = sheet.getImage(0, 0);
+	
+	private int counter = 5, xSprite = 0, ySprite = 0, turningPoint;
+	
+	private int health = 20;
+	
+	public boolean isPassive = true, isAttacking = true;
+	
+	private final int RUNSPEED = 5, MOVESPEED = 3;
+	
 	public int direction = 1, velX, velY = 0, xOrigin;
-
-	public Skeleton(int x, int y) {
-		super(x, y, WIDTH, HEIGHT, sheet);
+	
+	private int attackDamage;
+	
+	public int attackTime = 5;
+	
+	public Random randomInt = new Random();
+	
+	public Julius(int x, int y){
+		super(x,y,WIDTH,HEIGHT,sheet);
+		sheet.modifyRow(1, 1, 2*WIDTH, HEIGHT);
 		this.xOrigin = x;
-		this.health = 10;
+		this.health = 200;
 	}
-
-	public int getX() {
+	
+	public int getX(){
 		return this.x;
 	}
-
-	public int getY() {
+	public int getY(){
 		return this.y;
 	}
-
-	public void setX(int x) {
+	public void setX(int x){
 		this.x = x;
 	}
-
-	public void setY(int y) {
+	public void setY(int y){
 		this.y = y;
 	}
-
+	
 	public BufferedImage changeImages() {
 		counter++;
 
@@ -52,22 +58,30 @@ public class Skeleton extends Enemy {
 		if (counter >= 5) { // Should be 5
 			testCollision();
 			testAction();
-
-			if (isPassive) {
-				if (changeDirectionOrNaw())
-					direction *= -1;
-				
-				setVelx(MOVESPEED * direction);
-			}
-
+			walk(counter);
+		}
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
-				if (Game.getPlayer().getX() < this.x) {
-					direction = -1;
-				} else {
-					direction = 1;
+				if (isAttacking) // This sprite is for when he's attacking.
+				{
+					System.out.println(attackTime);
+					xSprite = 1;
+					if (attackTime > 4)
+					{
+						ySprite = 0;
+						attackTime--;
+					}
+					else if (attackTime > 0) {
+						ySprite = 1;
+						attackTime--;
+					}
+					else
+					{
+						isAttacking = false;
+						attackTime = 5;
+					}
 				}
-				setVelx(RUNSPEED * direction);
+				
 			}
 			if (ySprite == 0) {
 				ySprite++;
@@ -81,7 +95,6 @@ public class Skeleton extends Enemy {
 				currentImage = sheet.getImage(xSprite, ySprite);
 			}
 			counter = 0;
-		}
 		this.x += velX;
 		this.y += velY;
 		return currentImage;
@@ -103,7 +116,7 @@ public class Skeleton extends Enemy {
 	private void testAction() {
 		// If within attacking range of the player
 		System.out.println(Math.abs(Game.getPlayer().getX() - this.x));
-		if (Math.abs(Game.getPlayer().getX() - this.x) <= ATTACKRANGE) {
+		if (Math.abs(Game.getPlayer().getX() - this.x) <= 800) {
 			this.isPassive = false;
 			this.isAttacking = true;
 		} else {
@@ -134,6 +147,10 @@ public class Skeleton extends Enemy {
 			return true;
 		}
 		return false;
+	}
+	
+	public BufferedImage walk(int yCoord){
+		return sheet.getImage(0, yCoord)
 	}
 
 	private void setVelx(int vel) {
@@ -173,4 +190,5 @@ public class Skeleton extends Enemy {
 	public int getHealth(){
 		return health;
 	}
+
 }

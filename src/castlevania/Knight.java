@@ -7,22 +7,29 @@ public class Knight extends Enemy{
 	
 	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 3, RANGE = 200;
 	
+	final static int ATTACKRANGE = 200;
+	
 	static SpriteSheet sheet = new SpriteSheet("spritesheets/enemy_three_spritesheet.png", WIDTH, HEIGHT, SPRITEROWS, SPRITECOLS);
 	
 	private BufferedImage oldImage, currentImage = sheet.getImage(0, 0);
 	
 	private int counter = 0, xSprite = 0, ySprite = 0, turningPoint;
 	
+	private int health = 20;
+	
 	public boolean isPassive = true, isAttacking = true;
 	
-	private final int RUNSPEED = 8, MOVESPEED = 5;
+	private final int RUNSPEED = 5, MOVESPEED = 3;
 	
 	public int direction = 1, velX, velY = 0, xOrigin;
+	
+	private int attackDamage;
 	
 	public Knight(int x, int y)
 	{
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
+		this.health = 20;
 	}
 	public int getX(){
 		return this.x;
@@ -43,6 +50,9 @@ public class Knight extends Enemy{
 		
 		//Just sets Sprites and running Speeds.
 		if (counter >= 5) { //Should be 5
+			testCollision();
+			testAction();
+			
 			if(changeDirectionOrNaw())
 				direction *= -1;
 			if (isPassive) 
@@ -57,7 +67,12 @@ public class Knight extends Enemy{
 			
 			else if (isAttacking) // This sprite is for when he's attacking.
 			{
-				
+				if (Game.getPlayer().getX() < this.x) {
+					direction = -1;
+				} else {
+					direction = 1;
+				}
+				setVelx(RUNSPEED * direction);
 			}
 			//System.out.println(direction);
 			if (direction == 1)
@@ -104,4 +119,46 @@ public class Knight extends Enemy{
 	public BufferedImage getImage(){
 		return currentImage;
 	}
+	@Override
+	public void setIsAttacking(boolean b) {
+		this.isAttacking = b;
+		
+	}
+	
+	private void testAction() {
+		// If within attacking range of the player
+		System.out.println(Math.abs(Game.getPlayer().getX() - this.x));
+		if (Math.abs(Game.getPlayer().getX() - this.x) <= ATTACKRANGE) {
+			this.isPassive = false;
+			this.isAttacking = true;
+		} else {
+			this.isPassive = true;
+			this.isAttacking = false;
+		}
+	}
+	
+	public void setIsPassive(boolean p){
+		this.isPassive = p;
+	}
+	
+	public boolean isPassive(){
+		return isPassive;
+	}
+	public boolean isAttacking(){
+		return isAttacking;
+	}
+	
+	public int getDirection(){
+		return direction;
+	}
+	
+	
+	public int getHealth(){
+		return health;
+	}
+	
+	public void setHealth(int h){
+		this.health = h;
+	}
+
 }

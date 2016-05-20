@@ -5,7 +5,14 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.FileNotFoundException;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -14,11 +21,16 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	public final static int WIDTH = 800, HEIGHT = 600, SCROLLSPOT = 330;
 
 	private boolean running = false;
-	private Player p;
+	public static Player p;
 	private Graphics g;
 	private Thread t;
 	private GUI gui;
-	private boolean aIsDown = false, wIsDown = false, sIsDown = false, dIsDown = false;
+	private boolean aIsDown = false, wIsDown = false, sIsDown = false,
+			dIsDown = false;
+	public static boolean isDead = false;
+
+	public static int difficulty = 0;
+
 
 	private Image dbImage;
 	private Graphics dbg;
@@ -31,8 +43,11 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	public boolean isLevelOneDone = false;
 	public boolean isLevelTwoDone = false;
 	public boolean isLevelThreeDone = false;
-
+	public boolean isLevelFourDone = false;
+	
 	public static int levelNumber = 0;
+
+	public static int isDeadCounter = 0;
 
 	public static int getLevelNumber() {
 		return levelNumber;
@@ -45,9 +60,16 @@ public class Game extends JFrame implements Runnable, KeyListener {
 	private Audio complete = new Audio("music/stageclear.wav");
 	private boolean isStart = true;
 
-	private Level[] levels = { new Level("levels/level1bg.png", new Audio("music/vampirekiller.wav")),
-			new Level("levels/level2bg.png", new Audio("music/monsterdance.wav")),
-			new Level("levels/level3bg.png", new Audio("music/wickedchild.wav")) };
+	private static Level[] levels = {
+			new Level("levels/level1bg.png", new Audio(
+					"music/vampirekiller.wav")),
+			new Level("levels/level2bg.png",
+					new Audio("music/monsterdance.wav")),
+			new Level("levels/level3bg.png", new Audio("music/wickedchild.wav")),
+			
+			new Level("levels/boss1.png", new Audio("music/heartoffire.wav"))};
+
+	
 
 	public Game() {
 		tFrame.show();
@@ -59,13 +81,21 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		p = new Player(0, HEIGHT - 128);
 		oldHealth = p.getHealth();
 
-//		levels[0].getEnemyArrayList().add(new Ghoul(0, HEIGHT - 128));
-//		levels[0].getEnemyArrayList().add(new Ghoul(100, HEIGHT - 128));
-//		levels[0].getEnemyArrayList().add(new Ghoul(200, HEIGHT - 128));
-//		levels[0].getEnemyArrayList().add(new Ghoul(900, HEIGHT - 128));
+		// levels[0].getEnemyArrayList().add(new Ghoul(0, HEIGHT - 128));
+		// levels[0].getEnemyArrayList().add(new Ghoul(100, HEIGHT - 128));
+		// levels[0].getEnemyArrayList().add(new Ghoul(200, HEIGHT - 128));
+		// levels[0].getEnemyArrayList().add(new Ghoul(900, HEIGHT - 128));
 
 		addEnemies(0);
 		addEnemiesToFrame(0);
+		
+		addEnemies(1);
+		addEnemiesToFrame(1);
+		
+		addEnemies(2);
+		addEnemiesToFrame(2);
+		
+		addBoss(3);
 
 		gui = new GUI();
 		setSize(new Dimension(800, 600));
@@ -123,12 +153,12 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 				p.jump();
 				break;
-			/*
-			 * case KeyEvent.VK_S: sIsDown = true; p.setY(p.getY() + 10); break;
-			 * 
-			 * This is commented out because we don't need 'S' to do anything
-			 * yet.
-			 */
+				/*
+				 * case KeyEvent.VK_S: sIsDown = true; p.setY(p.getY() + 10); break;
+				 * 
+				 * This is commented out because we don't need 'S' to do anything
+				 * yet.
+				 */
 			case KeyEvent.VK_A:
 				aIsDown = true;
 				p.isStanding = false;
@@ -144,7 +174,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				whip1.play();
 				// g.drawImage(p.getSheet().getImage(0,1),p.getX(),p.getY(),
 				// null);
-				p.isSpacePressed = true;
+				p.isAttacking = true;
 				break;
 			}
 			if (aIsDown || dIsDown) {
@@ -172,7 +202,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		}
 
 		if (!aIsDown && !dIsDown) // This is where I have to fix things. Along
-		// with the below if statement.
+			// with the below if statement.
 		{
 			p.isStanding = true;
 		}
@@ -181,7 +211,6 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			p.isRunning = true;
 			p.isStanding = false; // Changed this.
 		}
-
 	}
 
 	public void keyTyped(KeyEvent arg0) {
@@ -198,16 +227,196 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		dbImage = createImage(getWIDTH(), getHEIGHT());
 		dbg = dbImage.getGraphics();
 
-		paintComponent(dbg);
+		try {
+			paintComponent(dbg);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		g.drawImage(dbImage, 0, 0, this);
 	}
 
-	public void paintComponent(Graphics g) {
-		// LEVEL 1
+	public void paintLevel(Graphics g) {
+		//if (!isLevelOneDone) {// Basically, if the first level isn't done it's
+		// gonna do this if statement only.
+		System.out.println("Level Number" + levelNumber);
+		levels[levelNumber].play();// plays the music for the first level
+		if(isDead){
+			levels[0].getMusic().stop();
+			Audio ad = new Audio("soundeffects/lostlife.wav");
+			ad.play();
+			Game.isDeadCounter =0;
+			Game.isDead = true;
+			try {
+				g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+				System.out.println(Game.isDeadCounter);
+				//Game.isDeadCounter++;
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			//p.changeImages();
+			try {
+				g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+				//g.drawImage(p.getImage(), p.getX(), p.getY(),null);
+				System.out.println(Game.isDeadCounter);
+				//Game.isDeadCounter++;
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//p.changeImages();
+			try {
+				g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+				System.out.println(Game.isDeadCounter);
+				//Game.isDeadCounter++;
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.exit(0);
+		}
+		//Player can't go back
+		if ((p.getX() - levels[levelNumber].getX() <= 0) && stillGoing)
+			p.setX(levels[levelNumber].getX());
+
+		//Player can't go more forward
+		if ((p.getX() - levels[levelNumber].getX()) >= 330 && stillGoing) {
+			levels[levelNumber].scrollImage(p.getX());
+			levels[levelNumber].paintComponent(g); // repaints the Level object.
+		}
+		//This statement will be when the level should be done
+		if (Math.abs(levels[levelNumber].getX()) > 7170 && stillGoing) {
+			setVisible(false);
+			//Stop the level from scrolling
+			levels[levelNumber].setX(7170);
+			//repaint level
+			levels[levelNumber].paintComponent(g);
+			stillGoing = false; //Level over
+			levels[levelNumber].getMusic().stop();
+			complete.play();// plays the victory theme
+			// this should be simple enough
+			int reply = JOptionPane.showConfirmDialog(null,
+					"You beat Level " + (getLevelNumber() + 1)
+					+ ", continue?\nGame Will Load For 3 Seconds.",
+					"Continue", JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.NO_OPTION)
+				System.exit(0);
+			else {
+				try {
+					Thread.sleep(4500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				switch (levelNumber) {
+				case 0:
+					isLevelOneDone = true;
+					break;
+				case 1:
+					isLevelTwoDone = true;
+					break;
+				case 2: 
+					isLevelThreeDone = true;
+					break;
+				}
+				isLevelOneDone = true;
+				isLevelDone = true;
+				levelNumber++;
+				isStart = true;
+			}
+			// System.exit(0);
+		}
+
+		// else{
+		levels[levelNumber].paintComponent(g);
+		// this loop can be used for changing all of the enemies images then
+		// drawing them.
+		// for(int i = 0; i<levels[0].getEnemyArrayList().size(); i++){
+		// levels[0].getEnemyArrayList().get(0).changeImages();
+		// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
+		// }
+
+		// checks if aggressive or naw
+		for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+			Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+			// System.out.println("ABS: " + Math.abs(p.getX() -
+			// temp.getX()));
+			// System.out.println("IS ATTACKING: " + temp.isAttacking());
+		}
+		// changes all enemy graphics
+		for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+			levels[levelNumber].getEnemyArrayList().get(i).changeImages();
+		}
+
+		// draws the enemies
+		for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+			Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+			temp.changeImages();
+		}
+		p.changeImages();
+		//Draws player
+		g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
+				this);
+		if (stillGoing)
+			gui.paintComponent(g);
+	}
+
+	public void paintComponent(Graphics g) throws IOException {
+
+		//paintLevel(g);
+
+		// ----------------------------LEVEL 1
 		if (!isLevelOneDone) {// Basically, if the first level isn't done it's
 			// gonna do this if statement only.
 			levels[0].play();// plays the music for the first level
-			if ((p.getX() - levels[0].getX() <= 0) && stillGoing)// this if
+			
+			if(isDead){
+				levels[0].getMusic().stop();
+				Audio ad = new Audio("soundeffects/lostlife.wav");
+				ad.play();
+				Game.isDeadCounter =0;
+				Game.isDead = true;
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				//p.changeImages();
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					//g.drawImage(p.getImage(), p.getX(), p.getY(),null);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//p.changeImages();
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.exit(0);
+			}
+
+			//BRANDON FIX THIS. WHY IS IT NOT SWAPPING THE IMAGES???????????????????????????????????
+
+			if ((p.getX() - levels[0].getX() <= 0) && stillGoing) // this if
 				// statement
 				// says if
 				// the
@@ -251,13 +460,14 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 				// this should be simple enough
 				int reply = JOptionPane.showConfirmDialog(null,
-						"You beat Level " + (getLevelNumber() + 1) + ", continue?\nGame Will Load For 3 Seconds.",
+						"You beat Level " + (getLevelNumber() + 1)
+						+ ", continue?\nGame Will Load For 3 Seconds.",
 						"Continue", JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.NO_OPTION)
 					System.exit(0);
 				else {
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(4500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -278,28 +488,67 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			// }
 
+			//DEDUCTS HEALTH FROM ENEMIES
+			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+				if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX())) <= 250) && p.isAttacking){
+					if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0){
+						Image icon = ImageIO.read(new File("images/smoke_up.gif"));
+						g.drawImage(icon, levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
+						levels[levelNumber].getEnemyArrayList().remove(i);}
+					else
+						levels[levelNumber].getEnemyArrayList().get(i).setHealth(levels[levelNumber].getEnemyArrayList().get(i).getHealth()-1);
+				}
+			}
+
+			// checks if aggressive or naw
+			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+				Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+				// System.out.println("ABS: " + Math.abs(p.getX() -
+				// temp.getX()));
+				// System.out.println("IS ATTACKING: " + temp.isAttacking());
+			}
+			// changes all enemy graphics
 			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
 				levels[levelNumber].getEnemyArrayList().get(i).changeImages();
 			}
-			
+
+			// draws the enemies
 			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
-				levels[levelNumber].getEnemyArrayList().get(i).changeImages();
-				g.drawImage(levels[levelNumber].getEnemyArrayList().get(i).getImage(),levels[levelNumber].getEnemyArrayList().get(i).getX()-levels[levelNumber].getX(), HEIGHT-128, null);
+				Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+				temp.changeImages();
+				g.drawImage(temp.getImage(),
+						temp.getX() - levels[levelNumber].getX(), HEIGHT - 128,
+						null);
 			}
 
 			// System.out.println(levels[0].getEnemyArrayList().get(0).getX());
 			p.changeImages();// changes the players images dependent on what
 			// they're doing
-			g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(), this);// draws
-																					// the
-																					// player
-																					// to
-																					// screen
+			g.drawImage(p.getImage(), p.getX() - levels[0].getX(), p.getY(),
+					this);// draws
+			// the
+			// player
+			// to
+			// screen
+			//g.drawImage(p.getSheet().getImage(3, 1),p.getX(),p.getY(), this);
 			if (stillGoing)
 				gui.paintComponent(g);// if the game is still going, it repaints
 			// the gui
+
+			//if(levels[levelNumber].getEnemyAmount() != 0)
+			//System.out.println("Position: " +Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getX() - (p.getX() + 128)));
+			//System.out.println("Is attacking: "+p.isAttacking );
+			//System.out.println("HEALTH: "+levels[levelNumber].getEnemyArrayList().get(0).getHealth());
+
+
 		}
 
+
+
+
+
+
+		// -------------------------------------------------------------------------------------
 		// LEVEL 2
 		if (isLevelOneDone && !isLevelTwoDone) {
 			setVisible(true);// resets the frames visibility to true
@@ -316,15 +565,56 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				p.isStanding = true;
 				isStart = false;
 				isLevelDone = false;
+				gui = new GUI();
 			}
 			levels[1].play();
-			if (p.getX() <= 0 && stillGoing)
-				p.setX(0);
+			
+			if(isDead){
+				levels[1].getMusic().stop();
+				Audio ad = new Audio("soundeffects/lostlife.wav");
+				ad.play();
+				Game.isDeadCounter =0;
+				Game.isDead = true;
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-			if (p.getX() > 330 && stillGoing) {
-				p.setX(330);
+				//p.changeImages();
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					//g.drawImage(p.getImage(), p.getX(), p.getY(),null);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//p.changeImages();
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.exit(0);
+			}
+			
+			if ((p.getX() - levels[1].getX() <= 0) && stillGoing) // this if
+				p.setX(levels[1].getX());
+
+			if ((p.getX() - levels[1].getX()) >= 330 && stillGoing) {
 				levels[1].scrollImage(p.getX());
-				levels[1].paintComponent(g);
+				levels[1].paintComponent(g); // repaints the Level object.
 			}
 
 			if (Math.abs(levels[1].getX()) > 7170 && stillGoing) {
@@ -341,13 +631,14 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				// shouldShow = false;
 
 				int reply = JOptionPane.showConfirmDialog(null,
-						"You beat Level " + (getLevelNumber() + 1) + ", continue?", "Continue",
+						"You beat Level " + (getLevelNumber() + 1)
+						+ ", continue?", "Continue",
 						JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.NO_OPTION)
 					System.exit(0);
 				else {
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(4500);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -359,16 +650,70 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				}
 			}
 
-			// else{
 			levels[1].paintComponent(g);
-
-			p.changeImages();
-			g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-			if (stillGoing)
-				gui.paintComponent(g);
+			// this loop can be used for changing all of the enemies images then
+			// drawing them.
+			// for(int i = 0; i<levels[0].getEnemyArrayList().size(); i++){
+			// levels[0].getEnemyArrayList().get(0).changeImages();
+			// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			// }
+
+			//DEDUCTS HEALTH FROM ENEMIES
+			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+				if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX()+128)) <= 250) && p.isAttacking){
+					if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0){
+						Image icon = ImageIO.read(new File("images/smoke_up.gif"));
+						g.drawImage(icon, levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
+						levels[levelNumber].getEnemyArrayList().remove(i);}
+					else
+						levels[levelNumber].getEnemyArrayList().get(i).setHealth(levels[levelNumber].getEnemyArrayList().get(i).getHealth()-1);
+				}
+			}
+
+			// checks if aggressive or naw
+			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+				Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+				// System.out.println("ABS: " + Math.abs(p.getX() -
+				// temp.getX()));
+				// System.out.println("IS ATTACKING: " + temp.isAttacking());
+			}
+			// changes all enemy graphics
+			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+				levels[levelNumber].getEnemyArrayList().get(i).changeImages();
+			}
+
+			// draws the enemies
+			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+				Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+				temp.changeImages();
+				g.drawImage(temp.getImage(),
+						temp.getX() - levels[levelNumber].getX(), HEIGHT - 128,
+						null);
+			}
+
+			// System.out.println(levels[0].getEnemyArrayList().get(0).getX());
+			p.changeImages();// changes the players images dependent on what
+			// they're doing
+			g.drawImage(p.getImage(), p.getX() - levels[1].getX(), p.getY(),
+					this);// draws
+			// the
+			// player
+			// to
+			// screen
+			//g.drawImage(p.getSheet().getImage(3, 1),p.getX(),p.getY(), this);
+			if (stillGoing)
+				gui.paintComponent(g);// if the game is still going, it repaints
+			// the gui
+
+			//if(levels[levelNumber].getEnemyAmount() != 0)
+			//System.out.println("Position: " +Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getX() - (p.getX() + 128)));
+			//System.out.println("Is attacking: "+p.isAttacking );
+			//System.out.println("HEALTH: "+levels[levelNumber].getEnemyArrayList().get(0).getHealth());
 		}
-		// LEVEL THREE
+
+
+
+		// ----------------------------------------------LEVEL THREE
 		if (isLevelOneDone && isLevelTwoDone && !isLevelThreeDone) {
 			setVisible(true);// resets the frames visibility to true
 			shouldShow = true;// essentially a control variable for the
@@ -384,15 +729,56 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				p.isStanding = true;
 				isStart = false;
 				isLevelDone = false;
+				gui = new GUI();
 			}
 			levels[2].play();
+			
+			if(isDead){
+				levels[2].getMusic().stop();
+				Audio ad = new Audio("soundeffects/lostlife.wav");
+				ad.play();
+				Game.isDeadCounter =0;
+				Game.isDead = true;
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				//p.changeImages();
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					//g.drawImage(p.getImage(), p.getX(), p.getY(),null);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				//p.changeImages();
+				try {
+					g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+					System.out.println(Game.isDeadCounter);
+					Game.isDeadCounter++;
+					Thread.sleep(700);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				System.exit(0);
+			}
+			
 			if (p.getX() <= 0 && stillGoing)
 				p.setX(0);
 
-			if (p.getX() > 330 && stillGoing) {
-				p.setX(330);
+			if ((p.getX() - levels[2].getX()) >= 330 && stillGoing) {
 				levels[2].scrollImage(p.getX());
-				levels[2].paintComponent(g);
+				levels[2].paintComponent(g); // repaints the Level object.
 			}
 
 			if (Math.abs(levels[2].getX()) > 7170 && stillGoing) {
@@ -409,13 +795,14 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				// shouldShow = false;
 
 				int reply = JOptionPane.showConfirmDialog(null,
-						"You beat Level " + (getLevelNumber() + 1) + ", continue?", "Continue",
+						"You beat Level " + (getLevelNumber() + 1)
+						+ ", continue?", "Continue",
 						JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.NO_OPTION)
 					System.exit(0);
 				else {
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(4500);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -427,15 +814,228 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				}
 			}
 
-			// else{
 			levels[2].paintComponent(g);
-
-			p.changeImages();
-			g.drawImage(p.getImage(), p.getX(), p.getY(), this);
-			if (stillGoing)
-				gui.paintComponent(g);
+			// this loop can be used for changing all of the enemies images then
+			// drawing them.
+			// for(int i = 0; i<levels[0].getEnemyArrayList().size(); i++){
+			// levels[0].getEnemyArrayList().get(0).changeImages();
+			// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
 			// }
+
+			//DEDUCTS HEALTH FROM ENEMIES
+			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+				if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX()+128)) <= 250) && p.isAttacking){
+					if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0){
+						Image icon = ImageIO.read(new File("images/smoke_up.gif"));
+						g.drawImage(icon, levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
+						levels[levelNumber].getEnemyArrayList().remove(i);}
+					else
+						levels[levelNumber].getEnemyArrayList().get(i).setHealth(levels[levelNumber].getEnemyArrayList().get(i).getHealth()-1);
+				}
+			}
+
+			// checks if aggressive or naw
+			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+				Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+				// System.out.println("ABS: " + Math.abs(p.getX() -
+				// temp.getX()));
+				// System.out.println("IS ATTACKING: " + temp.isAttacking());
+			}
+			// changes all enemy graphics
+			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+				levels[levelNumber].getEnemyArrayList().get(i).changeImages();
+			}
+
+			// draws the enemies
+			for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+				Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+				temp.changeImages();
+				g.drawImage(temp.getImage(),
+						temp.getX() - levels[levelNumber].getX(), HEIGHT - 128,
+						null);
+			}
+
+			// System.out.println(levels[0].getEnemyArrayList().get(0).getX());
+			p.changeImages();// changes the players images dependent on what
+			// they're doing
+			g.drawImage(p.getImage(), p.getX() - levels[2].getX(), p.getY(),
+					this);// draws
+			// the
+			// player
+			// to
+			// screen
+			//g.drawImage(p.getSheet().getImage(3, 1),p.getX(),p.getY(), this);
+			if (stillGoing)
+				gui.paintComponent(g);// if the game is still going, it repaints
+			// the gui
+
+			//if(levels[levelNumber].getEnemyAmount() != 0)
+			//System.out.println("Position: " +Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getX() - (p.getX() + 128)));
+			//System.out.println("Is attacking: "+p.isAttacking );
+			//System.out.println("HEALTH: "+levels[levelNumber].getEnemyArrayList().get(0).getHealth());
 		}
+		
+		// ----------------------------------------------LEVEL FOUR
+				if (isLevelOneDone && isLevelTwoDone && isLevelThreeDone && !isLevelFourDone) {
+					setVisible(true);// resets the frames visibility to true
+					shouldShow = true;// essentially a control variable for the
+					// statement above
+					if (isStart) {// this will only execute on the first pass.
+						p = new Player(0, HEIGHT - 128);// resets the player's position.
+						System.out.println("Does this even execute");// just a test
+						p.setX(0);// below are statements trying to get the player to
+						// not move on start.
+						stillGoing = true;
+						p.setVelx(0);
+						p.isRunning = false;
+						p.isStanding = true;
+						isStart = false;
+						isLevelDone = false;
+						gui = new GUI();
+						gui.addBossBar(g);
+					}
+					levels[3].play();
+					
+					if(isDead){
+						levels[3].getMusic().stop();
+						Audio ad = new Audio("soundeffects/lostlife.wav");
+						ad.play();
+						Game.isDeadCounter =0;
+						Game.isDead = true;
+						try {
+							g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+							System.out.println(Game.isDeadCounter);
+							Game.isDeadCounter++;
+							Thread.sleep(700);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						//p.changeImages();
+						try {
+							g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+							//g.drawImage(p.getImage(), p.getX(), p.getY(),null);
+							System.out.println(Game.isDeadCounter);
+							Game.isDeadCounter++;
+							Thread.sleep(700);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						//p.changeImages();
+						try {
+							g.drawImage(p.changeImages(), p.getX(), p.getY(), this);
+							System.out.println(Game.isDeadCounter);
+							Game.isDeadCounter++;
+							Thread.sleep(700);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						System.exit(0);
+					}
+					
+					if (p.getX() <= 0 && stillGoing)
+						p.setX(0);
+
+					if (p.getX() >= 600 && stillGoing)
+						p.setX(600);
+					
+
+					if (Math.abs(levels[2].getX()) > 7170 && stillGoing) {
+
+						setVisible(false);
+						levels[3].setX(7170);
+						levels[3].paintComponent(g);
+						stillGoing = false;
+						levels[3].getMusic().stop();
+						Audio a2 = new Audio("music/stageclear.wav");
+						a2.play();
+						// levels[0].setX();
+						// levels[0].setX(getX());
+						// shouldShow = false;
+
+						int reply = JOptionPane.showConfirmDialog(null,
+								"You beat Level " + (getLevelNumber() + 1)
+								+ ", continue?", "Continue",
+								JOptionPane.YES_NO_OPTION);
+						if (reply == JOptionPane.NO_OPTION)
+							System.exit(0);
+						else {
+							try {
+								Thread.sleep(4500);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							isLevelFourDone = true;
+							isLevelDone = true;
+							levelNumber++;
+							isStart = true;
+						}
+					}
+
+					levels[3].paintComponent(g);
+					// this loop can be used for changing all of the enemies images then
+					// drawing them.
+					// for(int i = 0; i<levels[0].getEnemyArrayList().size(); i++){
+					// levels[0].getEnemyArrayList().get(0).changeImages();
+					// g.drawImage(levels[0].getEnemyArrayList().get(0).getImage(),levels[0].getEnemyArrayList().get(0).getX(),levels[0].getEnemyArrayList().get(0).getY(),null);
+					// }
+
+					//DEDUCTS HEALTH FROM ENEMIES
+					for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
+						if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX()+128)) <= 250) && p.isAttacking){
+							if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0){
+								Image icon = ImageIO.read(new File("images/smoke_up.gif"));
+								g.drawImage(icon, levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
+								levels[levelNumber].getEnemyArrayList().remove(i);}
+							else
+								levels[levelNumber].getEnemyArrayList().get(i).setHealth(levels[levelNumber].getEnemyArrayList().get(i).getHealth()-1);
+						}
+					}
+
+					// checks if aggressive or naw
+					for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+						Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+						// System.out.println("ABS: " + Math.abs(p.getX() -
+						// temp.getX()));
+						// System.out.println("IS ATTACKING: " + temp.isAttacking());
+					}
+					// changes all enemy graphics
+					for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+						levels[levelNumber].getEnemyArrayList().get(i).changeImages();
+					}
+
+					// draws the enemies
+					for (int i = 0; i < levels[levelNumber].getEnemyAmount(); i++) {
+						Enemy temp = levels[levelNumber].getEnemyArrayList().get(i);
+						temp.changeImages();
+						g.drawImage(temp.getImage(),
+								temp.getX() - levels[levelNumber].getX(), HEIGHT - 128,
+								null);
+					}
+
+					// System.out.println(levels[0].getEnemyArrayList().get(0).getX());
+					p.changeImages();// changes the players images dependent on what
+					// they're doing
+					g.drawImage(p.getImage(), p.getX() - levels[3].getX(), p.getY(),
+							this);// draws
+					// the
+					// player
+					// to
+					// screen
+					//g.drawImage(p.getSheet().getImage(3, 1),p.getX(),p.getY(), this);
+					if (stillGoing)
+						gui.paintComponent(g);// if the game is still going, it repaints
+					// the gui
+
+					//if(levels[levelNumber].getEnemyAmount() != 0)
+					//System.out.println("Position: " +Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getX() - (p.getX() + 128)));
+					//System.out.println("Is attacking: "+p.isAttacking );
+					//System.out.println("HEALTH: "+levels[levelNumber].getEnemyArrayList().get(0).getHealth());
+				}
 
 	}
 
@@ -447,35 +1047,97 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		return HEIGHT;
 	}
 
-	public void addEnemies(int level){
-		addE(level,new Ghoul(0, HEIGHT - 128));
-		addE(level,new Ghoul(100, HEIGHT - 128));
-		addE(level,new Ghoul(200, HEIGHT - 128));
-		addE(level,new Ghoul(900, HEIGHT - 128));
-		addE(level,new Skeleton(1250, HEIGHT-128));
-		addE(level,new Skeleton(1250, HEIGHT-128));
-		addE(level,new Knight(2000,HEIGHT-128));
-	}
-	public void addEnemiesToFrame(int level) {
-		for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
-			this.getContentPane().add(levels[level].getEnemyArrayList().get(i));
-		}
-	}
-
-	public void paintEnemies(int level) {
-		for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
-			levels[level].getEnemyArrayList().get(i).changeImages();
-			g.drawImage(levels[level].getEnemyArrayList().get(i).getImage(),levels[level].getEnemyArrayList().get(i).getX()-levels[level].getX(), levels[level].getEnemyArrayList().get(i).getX()-levels[level].getY(), null);
-		}
-	}
-
-	public void updateEnemyPosition(int level) {
-		for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
-			levels[level].getEnemyArrayList().get(i).changeImages();
-		}
+	public void addBoss(int level){
+		addE(level, new RedSkeleton(500, HEIGHT-128));
 	}
 	
-	public void addE(int level, Enemy e){
-		levels[level].getEnemyArrayList().add(e);
+	public static Enemy getRedSkeleton(){
+		return levels[3].getEnemyArrayList().get(0);
 	}
-}
+	
+	public void addBossesToFrame(int level){
+		this.getContentPane().add(levels[level].getEnemyArrayList().get(0));
+	}
+	public void addEnemies(int level) {
+		// addE(level,new Ghoul(0, HEIGHT - 128));
+		// addE(level,new Ghoul(100, HEIGHT - 128));
+		// addE(level,new Ghoul(200, HEIGHT - 128));
+		// addE(level,new Ghoul(900, HEIGHT - 128));
+		//  addE(level, new Knight(1250, HEIGHT - 128));
+		// addE(level,new Skeleton(1250, HEIGHT-128));
+		// addE(level,new Knight(2000,HEIGHT-128));
+
+		Random randomInt = new Random();
+		int enemyChooser = 1+randomInt.nextInt(3);
+		if(difficulty == 0){
+			for(int i = 0; i<5; i++){
+				switch(enemyChooser){
+
+				case 1: addE(level, new Ghoul(300+randomInt.nextInt(7170), HEIGHT-128));
+				case 2: addE(level, new Skeleton(300+randomInt.nextInt(7170), HEIGHT-128));
+				case 3: addE(level, new Knight(300+randomInt.nextInt(7170), HEIGHT-128));
+				}
+				enemyChooser = 1+randomInt.nextInt(3);
+			}
+		}
+			
+		if(difficulty == 1){
+			for(int i = 0; i<10; i++){
+				switch(enemyChooser){
+
+				case 1: addE(level, new Ghoul(300+randomInt.nextInt(7170), HEIGHT-128));
+				case 2: addE(level, new Skeleton(300+randomInt.nextInt(7170), HEIGHT-128));				
+				case 3: addE(level, new Knight(300+randomInt.nextInt(7170), HEIGHT-128));	
+				}
+				enemyChooser = 1+randomInt.nextInt(3);
+			}
+		}
+		if(difficulty == 2){
+			for(int i = 0; i<15; i++){
+				switch(enemyChooser){
+
+				case 1: addE(level, new Ghoul(300+randomInt.nextInt(7170), HEIGHT-128));
+				case 2: addE(level, new Skeleton(300+randomInt.nextInt(7170), HEIGHT-128));
+				case 3: addE(level, new Knight(300+randomInt.nextInt(7170), HEIGHT-128));
+				}
+				enemyChooser = 1+randomInt.nextInt(3);
+			}	
+		}
+	}
+
+		public void addEnemiesToFrame(int level) {
+			for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
+				this.getContentPane().add(levels[level].getEnemyArrayList().get(i));
+			}
+		}
+
+		public void paintEnemies(int level) {
+			for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
+				Enemy temp = levels[level].getEnemyArrayList().get(i);
+				temp.changeImages();
+				g.drawImage(temp.getImage(), (temp.getX() - levels[level].getX()),
+						temp.getX() - levels[level].getY(), null);
+			}
+		}
+
+		public void updateEnemyPosition(int level) {
+			for (int i = 0; i < levels[level].getEnemyAmount(); i++) {
+				levels[level].getEnemyArrayList().get(i).changeImages();
+			}
+		}
+
+		public void addE(int level, Enemy e) {
+			levels[level].getEnemyArrayList().add(e);
+		}
+
+		public static Player getPlayer() {
+			return p;
+		}
+		public static boolean getIsDead(){
+			return isDead;
+		}
+
+		public static void setIsDead(boolean b){
+			isDead = b;
+		}
+	}

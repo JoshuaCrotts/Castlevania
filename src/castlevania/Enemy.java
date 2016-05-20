@@ -11,8 +11,9 @@ public abstract class Enemy extends Entity {
 	protected final int WIDTH;
 	protected final int HEIGHT;
 	protected SpriteSheet SHEET;
+	private int health;
 	
-	private int attackDamage;
+	//private int attackDamage;
 	
 	public Enemy(int x, int y, int WIDTH, int HEIGHT, SpriteSheet sheet)
 	{
@@ -27,12 +28,35 @@ public abstract class Enemy extends Entity {
 		
 	}
 	
+	public Enemy(){
+		
+	}
+	
+	protected void testCollision() {
+		Player player = Game.getPlayer();
+		int playerX = player.getX();
+		int playerY = player.getY();
+		
+		if ((Math.abs(this.x - playerX) <= player.getWIDTH())
+				&& (Math.abs(this.y - playerY) <= player.getHEIGHT()))
+		{
+			player.lose();
+		}
+	}
+	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 	}
 
 	public abstract BufferedImage getImage();
 	
+	public int getHealth(){
+		return health;
+	}
+	
+	public void setHealth(int h){
+		this.health = h;
+	}
 	public int getX() {
 		return x;
 	}
@@ -60,4 +84,13 @@ public abstract class Enemy extends Entity {
 	public SpriteSheet getSHEET() {
 		return SHEET;
 	}
+	public abstract void setIsAttacking(boolean b);
+	
+	public abstract void setIsPassive(boolean p);
+	
+	public abstract int getDirection();
+	
+	public abstract boolean isAttacking();
+	
+	public abstract boolean isPassive();
 }
