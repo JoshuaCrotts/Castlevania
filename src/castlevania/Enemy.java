@@ -12,7 +12,8 @@ public abstract class Enemy extends Entity {
 	protected final int HEIGHT;
 	protected SpriteSheet SHEET;
 	private int health;
-	
+	public boolean isDead = false;
+	public int isDeadCounter = 0;
 	//private int attackDamage;
 	
 	public Enemy(int x, int y, int WIDTH, int HEIGHT, SpriteSheet sheet)
@@ -28,9 +29,6 @@ public abstract class Enemy extends Entity {
 		
 	}
 	
-	public Enemy(){
-		
-	}
 	
 	protected void testCollision() {
 		Player player = Game.getPlayer();

@@ -23,7 +23,7 @@ public class Ghoul extends Enemy {
 	private int health = 2;
 
 	private final int RUNSPEED = 8, MOVESPEED = 2;
-
+	
 	public int direction = 1, velX, velY = 0, xOrigin;
 
 	public Ghoul(int x, int y) {
@@ -49,8 +49,14 @@ public class Ghoul extends Enemy {
 	}
 
 	public BufferedImage changeImages() {
+		if(isDead){
+			xSprite = 1;
+			ySprite++;
+			isDeadCounter++;
+			return sheet.getImage(xSprite, ySprite);
+		}
+		
 		counter++;
-
 		// Just sets Sprites and running Speeds.
 		if (counter >= 5) { // Should be 5
 			testCollision();

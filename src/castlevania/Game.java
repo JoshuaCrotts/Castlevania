@@ -176,13 +176,18 @@ public class Game extends JFrame implements Runnable, KeyListener {
 				// null);
 				p.isAttacking = true;
 				break;
+			case KeyEvent.VK_H:
+				JOptionPane.showMessageDialog(null, "ALL YOU HAVE TO DO IS SURVIVE.\nPRESS W to Jump\nPress A and D to move forward and backwards\nPress SPACE to Whip/Attack.");
+				break;
 			}
 			if (aIsDown || dIsDown) {
 				p.isRunning = true;
 			}
+			
+
 		}
 	}
-
+	
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		int i = e.getKeyCode();
@@ -490,10 +495,10 @@ public class Game extends JFrame implements Runnable, KeyListener {
 
 			//DEDUCTS HEALTH FROM ENEMIES
 			for(int i = 0; i<levels[levelNumber].getEnemyAmount(); i++){
-				if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX())) <= 250) && p.isAttacking){
+				if((Math.abs((levels[levelNumber].getEnemyArrayList().get(i).getX() - p.getX())) <= 250) && p.isAttacking && (Math.abs(levels[levelNumber].getEnemyArrayList().get(i).getY() - p.getY())<=100)){
 					if(levels[levelNumber].getEnemyArrayList().get(i).getHealth() == 0){
 						Image icon = ImageIO.read(new File("images/smoke_up.gif"));
-						g.drawImage(icon, levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
+						g.drawImage(levels[levelNumber].getEnemyArrayList().get(i).changeImages(), levels[levelNumber].getEnemyArrayList().get(i).getX(), levels[levelNumber].getEnemyArrayList().get(i).getY(),null);
 						levels[levelNumber].getEnemyArrayList().remove(i);}
 					else
 						levels[levelNumber].getEnemyArrayList().get(i).setHealth(levels[levelNumber].getEnemyArrayList().get(i).getHealth()-1);
@@ -539,7 +544,8 @@ public class Game extends JFrame implements Runnable, KeyListener {
 			//System.out.println("Position: " +Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getX() - (p.getX() + 128)));
 			//System.out.println("Is attacking: "+p.isAttacking );
 			//System.out.println("HEALTH: "+levels[levelNumber].getEnemyArrayList().get(0).getHealth());
-
+			if(levels[levelNumber].getEnemyAmount() > 0)
+			System.out.println("Y COORDINATE : "+(Math.abs(levels[levelNumber].getEnemyArrayList().get(0).getY() - p.getY())<=100));
 
 		}
 
@@ -1063,22 +1069,22 @@ public class Game extends JFrame implements Runnable, KeyListener {
 		// addE(level,new Ghoul(100, HEIGHT - 128));
 		// addE(level,new Ghoul(200, HEIGHT - 128));
 		// addE(level,new Ghoul(900, HEIGHT - 128));
-		//  addE(level, new Knight(1250, HEIGHT - 128));
+		  addE(level, new Knight(1250, HEIGHT - 128));
 		// addE(level,new Skeleton(1250, HEIGHT-128));
 		// addE(level,new Knight(2000,HEIGHT-128));
 
 		Random randomInt = new Random();
 		int enemyChooser = 1+randomInt.nextInt(3);
 		if(difficulty == 0){
-			for(int i = 0; i<5; i++){
-				switch(enemyChooser){
-
-				case 1: addE(level, new Ghoul(300+randomInt.nextInt(7170), HEIGHT-128));
-				case 2: addE(level, new Skeleton(300+randomInt.nextInt(7170), HEIGHT-128));
-				case 3: addE(level, new Knight(300+randomInt.nextInt(7170), HEIGHT-128));
-				}
-				enemyChooser = 1+randomInt.nextInt(3);
-			}
+//			for(int i = 0; i<5; i++){
+//				switch(enemyChooser){
+//
+//				case 1: addE(level, new Ghoul(300+randomInt.nextInt(7170), HEIGHT-128));
+//				case 2: addE(level, new Skeleton(300+randomInt.nextInt(7170), HEIGHT-128));
+//				case 3: addE(level, new Knight(300+randomInt.nextInt(7170), HEIGHT-128));
+//				}
+//				enemyChooser = 1+randomInt.nextInt(3);
+//			}
 		}
 			
 		if(difficulty == 1){

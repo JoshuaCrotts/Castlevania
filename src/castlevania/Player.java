@@ -33,6 +33,34 @@ public class Player extends JComponent {
 
 	public BufferedImage changeImages() {
 		oldImage = currentImage;
+		
+		if(Game.isDead){
+			
+			if(Game.isDeadCounter == 0){
+				xSprite = 0;
+				ySprite = 0;
+				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
+				currentImage =  sheet.getImage(xSprite, ySprite);
+				return currentImage;
+			}
+				
+			
+			if(Game.isDeadCounter == 1 ){
+				xSprite = 3;
+				ySprite = 1;
+				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
+				currentImage =  sheet.getImage(xSprite, ySprite);
+				return currentImage;
+
+			}
+			if(Game.isDeadCounter == 2){
+				xSprite = 3;
+				ySprite = 2;
+				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
+				currentImage =  sheet.getImage(xSprite, ySprite);
+				return currentImage;
+			}
+		}
 		counter++;
 /*		if (isSpacePressed) {
 			currentImage = sheet.getImage(0, 1);
@@ -109,31 +137,7 @@ public class Player extends JComponent {
 			}
 			counter = 0;
 		}
-		
-		if(Game.isDead){
-			
-			if(Game.isDeadCounter == 0){
-				xSprite = 0;
-				ySprite = 0;
-				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
-				currentImage =  sheet.getImage(xSprite, ySprite);
-			}
-				
-			
-			if(Game.isDeadCounter == 1 ){
-				xSprite = 3;
-				ySprite = 1;
-				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
-				currentImage =  sheet.getImage(xSprite, ySprite);
 
-			}
-			if(Game.isDeadCounter == 2){
-				xSprite = 3;
-				ySprite = 2;
-				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
-				currentImage =  sheet.getImage(xSprite, ySprite);
-			}
-		}
 		this.x += velx;
 		this.y += vely;
 		return currentImage;

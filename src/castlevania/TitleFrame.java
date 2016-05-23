@@ -140,6 +140,20 @@ public class TitleFrame extends JFrame implements ActionListener{
 		hard.setContentAreaFilled(false);
 		hard.setBorderPainted(false);
 		
+
+		//qimpossible
+		final JButton impos = new JButton();
+		impos.setBackground(Color.WHITE);
+		impos.setText("IMPOSSIBLE");
+		impos.setFont(customFont);
+		impos.setSize(300,200);
+		impos.setLocation(250, 300);
+		impos.setOpaque(false);
+		impos.setVisible(false);
+		impos.setContentAreaFilled(false);
+		impos.setBorderPainted(false);
+		
+		
 		final JButton exit = new JButton();
 		exit.setBackground(Color.WHITE);
 		exit.setText("QUIT");
@@ -158,12 +172,28 @@ public class TitleFrame extends JFrame implements ActionListener{
 		tFrame.getContentPane().add(easy);
 		tFrame.getContentPane().add(med);
 		tFrame.getContentPane().add(hard);
+		tFrame.getContentPane().add(impos);
 		
 
 	    JLabel background = new JLabel(new ImageIcon("images/Castlevania_logo_color.png"));
 	    background.setLayout(new BorderLayout());
 	    tFrame.getContentPane().add(background);
 		
+		
+		impos.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				Audio a = new Audio("soundeffects/menuselect.wav");
+				a.play();
+				Game.difficulty = 3;
+				med.setVisible(false);
+				hard.setVisible(false);
+				easy.setVisible(false);
+				impos.setVisible(false);
+				help.setVisible(true);
+				exit.setVisible(false);
+			}
+		});
+	    
 		easy.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				Audio a = new Audio("soundeffects/menuselect.wav");
@@ -173,6 +203,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 				hard.setVisible(false);
 				easy.setVisible(false);
 				help.setVisible(true);
+				impos.setVisible(false);
 				exit.setVisible(false);
 				
 			}
@@ -187,6 +218,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 				hard.setVisible(false);
 				easy.setVisible(false);
 				help.setVisible(true);
+				impos.setVisible(false);
 				exit.setVisible(false);
 				
 			}
@@ -201,10 +233,14 @@ public class TitleFrame extends JFrame implements ActionListener{
 				hard.setVisible(false);
 				easy.setVisible(false);
 				help.setVisible(true);
+				impos.setVisible(false);
 				exit.setVisible(false);
 				
 			}
 		});
+		
+
+
 	    
 		play.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -215,9 +251,11 @@ public class TitleFrame extends JFrame implements ActionListener{
 				easy.setVisible(true);
 				med.setVisible(true);
 				hard.setVisible(true);
+				impos.setVisible(true);
 				
 			}
 		});
+
 		
 		help.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
