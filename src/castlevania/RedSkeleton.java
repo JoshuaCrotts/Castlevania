@@ -2,7 +2,9 @@ package castlevania;
 
 import java.awt.image.BufferedImage;
 
-public class RedSkeleton extends Skeleton {
+public class RedSkeleton extends Enemy {
+
+	private static final long serialVersionUID = -7197389649495032529L;
 
 	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2,
 			RANGE = 300, ATTACKRANGE = 300;
@@ -19,14 +21,19 @@ public class RedSkeleton extends Skeleton {
 
 	public boolean isPassive = true, isAttacking = false;
 
-	private final int RUNSPEED = 4, MOVESPEED = 2; //Might change AD
+	private final int RUNSPEED = 3, MOVESPEED = 2; //Might change AD
 
 	public int direction = 1, velX, velY = 0, xOrigin;
 
+	/**Basically this is a boss.
+	 * 
+	 * @param x coord
+	 * @param y coord
+	 */
 	public RedSkeleton(int x, int y) {
-		super(x, y);
+		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
-		this.health = 10000;
+		this.health = 20;
 	}
 
 	public int getX() {
@@ -44,7 +51,11 @@ public class RedSkeleton extends Skeleton {
 	public void setY(int y) {
 		this.y = y;
 	}
-
+	/**
+	 * This will change the image every five times
+	 * the counter is incremented so it won't swap so fast.
+	 * Changes depend on the distance between the player's X and Y, etc.
+	 */
 	public BufferedImage changeImages() {
 		counter++;
 

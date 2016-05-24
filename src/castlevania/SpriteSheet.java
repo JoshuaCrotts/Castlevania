@@ -14,6 +14,16 @@ public class SpriteSheet {
 	private BufferedImage[][] images;
 	private BufferedImage[][] flippedImages; //For when Player goes left
 
+	/**
+	 * Basically, this class makes the sprite sheets for the enemies.
+	 * It will be a 2D array for both the regular images and flipped images.
+	 * There is a method to rotate the images.
+	 * @param stringSpriteSheet
+	 * @param width
+	 * @param height
+	 * @param rows
+	 * @param columns
+	 */
 	public SpriteSheet(String stringSpriteSheet, int width, int height, int rows, int columns) 
 	{
 		try {
@@ -54,6 +64,14 @@ public class SpriteSheet {
         return createTransformed(image, at);
     }
 
+	/**
+	 * Modifies a row at given parameters @row && @col
+	 * Modifies them to size parameters @width && @height
+	 * @param row
+	 * @param cols
+	 * @param width
+	 * @param height
+	 */
 	public void modifyRow(int row, int cols, int width, int height)
 	{
 		int y = row * height;

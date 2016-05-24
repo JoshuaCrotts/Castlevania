@@ -3,9 +3,14 @@ package castlevania;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Basically, this class is to get a font and utilize it that is CUSTOM,
+ * NOT IN FROM THE COMPUTER. i.e, it has to come with the Java game.
+ * @author - not all my code, but the basic idea is.
+ *
+ */
 public class Fonts {
 
 	private static ArrayList<Fonts> fonts = new ArrayList<Fonts>();

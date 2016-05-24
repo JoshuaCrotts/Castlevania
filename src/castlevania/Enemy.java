@@ -26,10 +26,11 @@ public abstract class Enemy extends Entity {
 	public Enemy(int WIDTH, int HEIGHT){
 		this.WIDTH = WIDTH;
 		this.HEIGHT = HEIGHT;
-		
 	}
-	
-	
+
+	/**
+	 * This method checks whether or not the player's X and the enemies X are within a "range"
+	 */
 	protected void testCollision() {
 		Player player = Game.getPlayer();
 		int playerX = player.getX();

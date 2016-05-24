@@ -37,14 +37,9 @@ public class Level extends JComponent{
 		this.obstacles = new ArrayList<Entity>();
 		this.enemies = new ArrayList<Enemy>();
 		this.music = music;
-		//music.play();
 		t.start();
 
 	}
-	//	public void loadLevel(int index)
-	//	{
-	//		
-	//	}
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -159,6 +154,9 @@ public class Level extends JComponent{
 	public int getEnemyAmount()
 	{
 		return enemies.size();
+	}
+	public int getSCROLLSPEED() {
+		return SCROLLSPEED;
 	}
 
 }

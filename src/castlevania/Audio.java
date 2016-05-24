@@ -8,7 +8,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 
-/**Not my source code*/
+/**Not my source code
+ * 
+ * Takes an audio source in and plays it. ONLY SUPPORTS WAVs.
+ */
 public class Audio {
 
 	private String fileName;

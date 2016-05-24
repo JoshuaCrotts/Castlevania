@@ -1,9 +1,7 @@
 package castlevania;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
 import javax.swing.JComponent;
 
 public class Player extends JComponent {
@@ -33,34 +31,7 @@ public class Player extends JComponent {
 
 	public BufferedImage changeImages() {
 		oldImage = currentImage;
-		
-		if(Game.isDead){
-			
-			if(Game.isDeadCounter == 0){
-				xSprite = 0;
-				ySprite = 0;
-				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
-				currentImage =  sheet.getImage(xSprite, ySprite);
-				return currentImage;
-			}
-				
-			
-			if(Game.isDeadCounter == 1 ){
-				xSprite = 3;
-				ySprite = 1;
-				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
-				currentImage =  sheet.getImage(xSprite, ySprite);
-				return currentImage;
 
-			}
-			if(Game.isDeadCounter == 2){
-				xSprite = 3;
-				ySprite = 2;
-				System.out.println("X SPRITE: "+xSprite+"\nY SPRITE: "+ySprite);
-				currentImage =  sheet.getImage(xSprite, ySprite);
-				return currentImage;
-			}
-		}
 		counter++;
 /*		if (isSpacePressed) {
 			currentImage = sheet.getImage(0, 1);
@@ -88,7 +59,7 @@ public class Player extends JComponent {
 		if (counter >= 5) { // Should be 5
 			if (isAttacking) // This sprite is for when he's attacking.
 			{
-				System.out.println(attackTime);
+				//System.out.println(attackTime);
 				xSprite = 1;
 				if (attackTime > 4)
 				{
@@ -136,6 +107,36 @@ public class Player extends JComponent {
 				currentImage = sheet.getFlippedImage(xSprite, ySprite);
 			}
 			counter = 0;
+			
+			if(Game.isDead){
+				xSprite = 0;
+				ySprite = 0;
+				if(direction == 1)
+					currentImage = sheet.getImage(xSprite,ySprite);
+				else
+					currentImage = sheet.getFlippedImage(xSprite, ySprite);
+				
+				if(Game.isDeadCounter == 1){
+					xSprite = 3;
+					ySprite = 1;
+					
+					if(direction == 1)
+						currentImage = sheet.getImage(xSprite,ySprite);
+					else
+						currentImage = sheet.getFlippedImage(xSprite, ySprite);
+					
+				}
+				
+				if(Game.isDeadCounter == 2){
+					xSprite = 3;
+					ySprite = 2;
+					if(direction == 1)
+						currentImage = sheet.getImage(xSprite,ySprite);
+					else
+						currentImage = sheet.getFlippedImage(xSprite, ySprite);
+					
+				}
+			}
 		}
 
 		this.x += velx;
@@ -143,7 +144,11 @@ public class Player extends JComponent {
 		return currentImage;
 
 	}
-
+	
+	/**Checks to see if the method needs to repaint, if the old image
+	 * equals the new image.
+	 * @returns true if the image is the same, false otherwise.
+	 */
 	public boolean checkRepaint() {
 		if (currentImage == oldImage)
 			return false;
@@ -167,6 +172,10 @@ public class Player extends JComponent {
 	// repaint();
 	// }
 
+	/**Was going to check for platforms, but no platforms were added in.
+	 * 
+	 * @return true if y plus the height of the character is clear of obstacles, false otherwise.
+	 */
 	public boolean clearBelow() // Modify later to make it check below for
 								// platforms.
 	{

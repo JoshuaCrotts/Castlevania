@@ -4,8 +4,10 @@ import java.awt.image.BufferedImage;
 
 public class Skeleton extends Enemy {
 
-	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 1, SPRITECOLS = 2,
-			RANGE = 100, ATTACKRANGE = 300;
+	private static final long serialVersionUID = -6307696125486440188L;
+
+	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 2, SPRITECOLS = 7,
+			RANGE = 250, ATTACKRANGE = 40;
 
 	static SpriteSheet sheet = new SpriteSheet(
 			"spritesheets/enemy_two_spritesheet.png", WIDTH, HEIGHT,
@@ -26,7 +28,7 @@ public class Skeleton extends Enemy {
 	public Skeleton(int x, int y) {
 		super(x, y, WIDTH, HEIGHT, sheet);
 		this.xOrigin = x;
-		this.health = 10;
+		this.health = 2;
 	}
 
 	public int getX() {
@@ -80,6 +82,20 @@ public class Skeleton extends Enemy {
 			} else {
 				currentImage = sheet.getImage(xSprite, ySprite);
 			}
+			if(isDead){
+				x = getX();
+				xSprite = 1;
+				ySprite++;
+				isDeadCounter++;
+				if(isDeadCounter == 7)
+					currentImage = null;
+				
+				if(direction == 1)
+					currentImage = sheet.getImage(xSprite, ySprite);
+				else
+					currentImage = sheet.getFlippedImage(xSprite, ySprite);
+				
+			}
 			counter = 0;
 		}
 		this.x += velX;
@@ -102,7 +118,7 @@ public class Skeleton extends Enemy {
 
 	private void testAction() {
 		// If within attacking range of the player
-		System.out.println(Math.abs(Game.getPlayer().getX() - this.x));
+		//System.out.println(Math.abs(Game.getPlayer().getX() - this.x));
 		if (Math.abs(Game.getPlayer().getX() - this.x) <= ATTACKRANGE) {
 			this.isPassive = false;
 			this.isAttacking = true;

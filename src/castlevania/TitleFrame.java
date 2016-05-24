@@ -19,10 +19,12 @@ import javax.swing.JLabel;
 
 public class TitleFrame extends JFrame implements ActionListener{
 
+	private static final long serialVersionUID = -4579485156392500543L;
 	public boolean shouldBeVisible = false;
 	private static final int WIDTH = Game.getWIDTH();
 	private static final int HEIGHT = Game.getHEIGHT();
 	public static boolean shouldDestroy = false;
+	@SuppressWarnings("unused")
 	private Graphics g;
 	private BufferedImage icon;
 	public JFrame tFrame;
@@ -86,7 +88,7 @@ public class TitleFrame extends JFrame implements ActionListener{
 
 		final JButton madeBy = new JButton();
 		madeBy.setBackground(Color.WHITE);
-		madeBy.setText("Made by Joshua Crotts And Brandon Willis");
+		madeBy.setText("Made by Joshua Crotts");
 		madeBy.setFont(customFont);
 		madeBy.setSize(800,200);
 		madeBy.setLocation(10, 440); 
@@ -95,6 +97,9 @@ public class TitleFrame extends JFrame implements ActionListener{
 		madeBy.setContentAreaFilled(false);
 		madeBy.setBorderPainted(false);
 		
+		/**
+		 * Below is what actually utilizes a new font. Kind of confusing.
+		 */
 		try {
 			customFont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/oldschool.ttf")).deriveFont(24f);
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -109,8 +114,8 @@ public class TitleFrame extends JFrame implements ActionListener{
 		easy.setBackground(Color.WHITE);
 		easy.setText("EASY");
 		easy.setFont(customFont);
-		easy.setSize(300,200);
-		easy.setLocation(80, 210); 
+		easy.setSize(150,120);
+		easy.setLocation(130, 220); 
 		easy.setOpaque(false);
 		easy.setVisible(false);
 		easy.setContentAreaFilled(false);
@@ -121,8 +126,8 @@ public class TitleFrame extends JFrame implements ActionListener{
 		med.setBackground(Color.WHITE);
 		med.setText("MEDIUM");
 		med.setFont(customFont);
-		med.setSize(300,200);
-		med.setLocation(240, 210); 
+		med.setSize(180,120);
+		med.setLocation(300, 220); 
 		med.setOpaque(false);
 		med.setVisible(false);
 		med.setContentAreaFilled(false);
@@ -133,8 +138,8 @@ public class TitleFrame extends JFrame implements ActionListener{
 		hard.setBackground(Color.WHITE);
 		hard.setText("HARD");
 		hard.setFont(customFont);
-		hard.setSize(300,200);
-		hard.setLocation(400, 210); 
+		hard.setSize(150,120);
+		hard.setLocation(500, 220); 
 		hard.setOpaque(false);
 		hard.setVisible(false);
 		hard.setContentAreaFilled(false);
@@ -146,8 +151,8 @@ public class TitleFrame extends JFrame implements ActionListener{
 		impos.setBackground(Color.WHITE);
 		impos.setText("IMPOSSIBLE");
 		impos.setFont(customFont);
-		impos.setSize(300,200);
-		impos.setLocation(250, 300);
+		impos.setSize(300,120);
+		impos.setLocation(250, 320);
 		impos.setOpaque(false);
 		impos.setVisible(false);
 		impos.setContentAreaFilled(false);
@@ -270,11 +275,11 @@ public class TitleFrame extends JFrame implements ActionListener{
 				}
 				
 				help.setVisible(false);
-			//	try{
-			//	a = new Audio("music/frontgates.wav");
-			//	a.play();
-			//	Thread.sleep(7500);
-			//	}catch(Exception ex){ex.printStackTrace();}
+				try{
+				a = new Audio("music/frontgates.wav");
+				a.play();
+				Thread.sleep(7500);
+				}catch(Exception ex){ex.printStackTrace();}
 				Game.shouldShow = true;
 				tFrame.setVisible(false);
 			}
@@ -341,5 +346,13 @@ public class TitleFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public BufferedImage getIcon() {
+		return icon;
+	}
+
+	public void setIcon(BufferedImage icon) {
+		this.icon = icon;
 	}
 }
