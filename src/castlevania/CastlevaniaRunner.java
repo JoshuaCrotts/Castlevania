@@ -12,6 +12,8 @@ package castlevania;
  * and I definitely put in a lot of work into it. It was very hard.
  * @author Joshua Crotts
  *
+ * Thanks for the credit :-)
+ * @author Brandon Willis
  */
 public class CastlevaniaRunner {
 
