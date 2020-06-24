@@ -1,7 +1,7 @@
 <h1 align="center">Castlevania</h1>
 
 <p align="center">
-  <img width="350" height="350" src="castlevania.gif">
+  <img width="350" height="250" src="castlevania.gif">
 </p>
 
 [![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/castlevania/badge)](https://www.codefactor.io/repository/github/joshuacrotts/castlevania) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/Castlevania) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/Castlevania) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/Castlevania)
