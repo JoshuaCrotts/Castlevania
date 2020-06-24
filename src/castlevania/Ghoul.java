@@ -4,194 +4,178 @@ import java.awt.image.BufferedImage;
 
 public class Ghoul extends Enemy {
 
-	private static final long serialVersionUID = 4768781913491207027L;
+    private static final long serialVersionUID = 4768781913491207027L;
 
-	final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 2, SPRITECOLS = 7,
-			RANGE = 200, ATTACKRANGE = 100;
+    public final static int WIDTH = 128, HEIGHT = 128, SPRITEROWS = 2, SPRITECOLS = 7,
+            RANGE = 200, ATTACKRANGE = 100;
 
-	static SpriteSheet sheet = new SpriteSheet(
-			"spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT,
-			SPRITEROWS, SPRITECOLS);
+    public static SpriteSheet sheet = new SpriteSheet(
+            "spritesheets/enemy_one_spritesheet.png", WIDTH, HEIGHT,
+            SPRITEROWS, SPRITECOLS);
 
-	private BufferedImage currentImage = sheet.getImage(0, 0);
+    private BufferedImage currentImage = sheet.getImage(0, 0);
 
-	private int health = 10;
-	
-	private int counter = 0, xSprite = 0, ySprite = 0;
+    private int health = 10;
 
-	public boolean isPassive = true, isAttacking = false;
+    private int counter = 0, xSprite = 0, ySprite = 0;
 
-	private final int RUNSPEED = 3, MOVESPEED = 2; //Might change AD
+    public boolean isPassive = true, isAttacking = false;
 
-	public int direction = 1, velX, velY = 0, xOrigin;
+    private final int RUNSPEED = 3, MOVESPEED = 2; //Might change AD
 
-	public Ghoul(int x, int y) {
-		super(x, y, WIDTH, HEIGHT, sheet);
-		this.xOrigin = x;
-		this.health = 2;
-	}
+    public int direction = 1, velX, velY = 0, xOrigin;
 
-	public int getX() {
-		return this.x;
-	}
+    public Ghoul(int x, int y) {
+        super(x, y, WIDTH, HEIGHT, sheet);
+        this.xOrigin = x;
+        this.health = 2;
+    }
 
-	public int getY() {
-		return this.y;
-	}
+    @Override
+    public int getX() {
+        return this.x;
+    }
 
-	public void setX(int x) {
-		this.x = x;
-	}
+    @Override
+    public int getY() {
+        return this.y;
+    }
 
-	public void setY(int y) {
-		this.y = y;
-	}
+    @Override
+    public void setX(int x) {
+        this.x = x;
+    }
 
-	/**
-	 * This will change the image every five times
-	 * the counter is incremented so it won't swap so fast.
-	 * Changes depend on the distance between the player's X and Y, etc.
-	 */
-	public BufferedImage changeImages() {
-		counter++;
+    @Override
+    public void setY(int y) {
+        this.y = y;
+    }
 
-		// Just sets Sprites and running Speeds.
-		if (counter >= 5) { // Should be 5
-			testCollision();
-			testAction();
+    /**
+     * This will change the image every five times the counter is incremented so
+     * it won't swap so fast. Changes depend on the distance between the
+     * player's X and Y, etc.
+     */
+    @Override
+    public BufferedImage changeImages() {
+        counter++;
 
-			if (isPassive) {
-				if (changeDirectionOrNaw())
-					direction *= -1;
-				
-				setVelx(MOVESPEED * direction);
-			}
+        // Just sets Sprites and running Speeds.
+        if (counter >= 5) { // Should be 5
+            testCollision();
+            testAction();
 
-			else if (isAttacking) // This sprite is for when he's attacking.
-			{
-				if (Game.getPlayer().getX() < this.x) {
-					direction = -1;
-				} else {
-					direction = 1;
-				}
-				setVelx(RUNSPEED * direction);
-			}
-			if (ySprite == 0) {
-				ySprite++;
-			} else {
-				ySprite = 0;
-			}
-			// System.out.println(direction);
-			if (direction == 1) {
-				currentImage = sheet.getFlippedImage(xSprite, ySprite);
-			} else {
-				currentImage = sheet.getImage(xSprite, ySprite);
-			}
-			if(isDead){
-				x = getX();
-				xSprite = 1;
-				ySprite++;
-				isDeadCounter++;
-				if(isDeadCounter == 7)
-					currentImage = null;
-				
-				if(direction == 1)
-					currentImage = sheet.getImage(xSprite, ySprite);
-				else
-					currentImage = sheet.getFlippedImage(xSprite, ySprite);
-				
-			}
-			counter = 0;
-		}
-		this.x += velX;
-		this.y += velY;
-		return currentImage;
-	}
+            if (isPassive) {
+                if (changeDirectionOrNaw()) {
+                    direction *= -1;
+                }
 
-	/*private void testCollision() {
-		// TODO Auto-generated method stub
-		Player player = Game.getPlayer();
-		int playerX = player.getX();
-		int playerY = player.getY();
-		
-		if ((Math.abs(this.x - playerX) <= player.getWIDTH())
-				&& (Math.abs(this.y - playerY) >= player.getHEIGHT()))
-		{
-			player.lose();
-		}
-	}*/
+                setVelx(MOVESPEED * direction);
+            } else if (isAttacking) // This sprite is for when he's attacking.
+            {
+                if (Game.getPlayer().getX() < this.x) {
+                    direction = -1;
+                } else {
+                    direction = 1;
+                }
+                setVelx(RUNSPEED * direction);
+            }
+            if (ySprite == 0) {
+                ySprite++;
+            } else {
+                ySprite = 0;
+            }
+            // System.out.println(direction);
+            if (direction == 1) {
+                currentImage = sheet.getFlippedImage(xSprite, ySprite);
+            } else {
+                currentImage = sheet.getImage(xSprite, ySprite);
+            }
+            if (isDead) {
+                x = getX();
+                xSprite = 1;
+                ySprite++;
+                isDeadCounter++;
+                if (isDeadCounter == 7) {
+                    currentImage = null;
+                }
 
-	private void testAction() {
-		// If within attacking range of the player
-		//System.out.println(Math.abs(Game.getPlayer().getX() - this.x));
-		if (Math.abs(Game.getPlayer().getX() - this.x) <= ATTACKRANGE) {
-			this.isPassive = false;
-			this.isAttacking = true;
-		} else {
-			this.isPassive = true;
-			this.isAttacking = false;
-		}
-	}
+                if (direction == 1) {
+                    currentImage = sheet.getImage(xSprite, ySprite);
+                } else {
+                    currentImage = sheet.getFlippedImage(xSprite, ySprite);
+                }
 
-	private boolean changeDirectionOrNaw() {
-		/*
-		 * Tests if the difference between the enemy's x-Coordinate and Origin
-		 * would be closer to the origin with or without the direction added.
-		 */
-		if (Math.abs(this.x - xOrigin) < (Math.abs((this.x + direction)
-				- xOrigin))
-				&& outsideRange()) {
-			return true;
-		}
-		return false;
-	}
+            }
+            counter = 0;
+        }
+        this.x += velX;
+        this.y += velY;
+        return currentImage;
+    }
 
-	/*
-	 * @Override public void paintComponent(Graphics g){
-	 * super.paintComponent(g); g.drawImage(currentImage, x, y, null); }
-	 */
-	private boolean outsideRange() {
-		if (Math.abs(this.x - xOrigin) > RANGE) {
-			return true;
-		}
-		return false;
-	}
+    private void testAction() {
+        if (Math.abs(Game.getPlayer().getX() - this.x) <= ATTACKRANGE) {
+            this.isPassive = false;
+            this.isAttacking = true;
+        } else {
+            this.isPassive = true;
+            this.isAttacking = false;
+        }
+    }
 
-	private void setVelx(int vel) {
-		this.velX = vel;
-	}
+    private boolean changeDirectionOrNaw() {
+        /*
+         * Tests if the difference between the enemy's x-Coordinate and Origin
+         * would be closer to the origin with or without the direction added.
+         */ 
+        return Math.abs(this.x - xOrigin) < (Math.abs((this.x + direction)
+                - xOrigin))
+                && outsideRange();
+    }
 
-	public BufferedImage getImage() {
-		return currentImage;
-	}
+    private boolean outsideRange() {
+        if (Math.abs(this.x - xOrigin) > RANGE) {
+            return true;
+        }
+        return false;
+    }
 
-	@Override
-	public void setIsAttacking(boolean b) {
-		this.isAttacking = b;
+    private void setVelx(int vel) {
+        this.velX = vel;
+    }
 
-	}
+    public BufferedImage getImage() {
+        return currentImage;
+    }
 
-	public void setIsPassive(boolean p) {
-		this.isPassive = p;
-	}
+    @Override
+    public void setIsAttacking(boolean b) {
+        this.isAttacking = b;
 
-	public boolean isPassive() {
-		return isPassive;
-	}
+    }
 
-	public boolean isAttacking() {
-		return isAttacking;
-	}
+    public void setIsPassive(boolean p) {
+        this.isPassive = p;
+    }
 
-	public int getDirection() {
-		return direction;
-	}
-	
-	public void setHealth(int health){
-		this.health = health;
-	}
-	
-	public int getHealth(){
-		return health;
-	}
+    public boolean isPassive() {
+        return isPassive;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getHealth() {
+        return health;
+    }
 }

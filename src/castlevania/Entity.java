@@ -4,61 +4,62 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
 
-public abstract class Entity extends JComponent{
+public abstract class Entity extends JComponent {
 
-	private static final long serialVersionUID = 9043644151166500825L;
-	private int width;
-	private int height;
-	private SpriteSheet sheet;
-	
-	/**Entities are ANY object in the game that is mutable.
-	 * 
-	 * @param width
-	 * @param height
-	 * @param sheet
-	 */
-	public Entity(int width, int height, SpriteSheet sheet)
-	{
-		this.width = width;
-		this.height = height;
-		this.sheet = sheet;
-	}
-	public Entity(SpriteSheet sheet)
-	{
-		this.sheet = sheet;
-	}
-	
-	public abstract BufferedImage changeImages();
+    private static final long serialVersionUID = 9043644151166500825L;
+    private int width;
+    private int height;
+    private SpriteSheet sheet;
 
-	public Entity() {
-		// TODO Auto-generated constructor stub
-	}
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-	}	
-	
-	public int getWidth() {
-		return width;
-	}
+    /**
+     * Entities are ANY object in the game that is mutable.
+     *
+     * @param width
+     * @param height
+     * @param sheet
+     */
+    public Entity(int width, int height, SpriteSheet sheet) {
+        this.width = width;
+        this.height = height;
+        this.sheet = sheet;
+    }
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
+    public Entity(SpriteSheet sheet) {
+        this.sheet = sheet;
+    }
 
-	public int getHeight() {
-		return height;
-	}
+    public abstract BufferedImage changeImages();
 
-	public void setHeight(int height) {
-		this.height = height;
-	}
+    public Entity() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public SpriteSheet getSheet() {
-		return sheet;
-	}
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+    }
 
-	public void setSheet(SpriteSheet sheet) {
-		this.sheet = sheet;
-	}
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public SpriteSheet getSheet() {
+        return sheet;
+    }
+
+    public void setSheet(SpriteSheet sheet) {
+        this.sheet = sheet;
+    }
 }
