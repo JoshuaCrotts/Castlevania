@@ -822,71 +822,21 @@ public class Game extends JFrame implements Runnable, KeyListener {
      */
     public void addEnemies(int level) {
         Random randomInt = new Random();
+        final int DIFFICULTY_MODIFIER = 5;
         int enemyChooser = 1 + randomInt.nextInt(3);
-        if (difficulty == 1) {
-            for (int i = 0; i < 5; i++) {
-                switch (enemyChooser) {
-
-                    case 1:
-                        addE(level, new Ghoul(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    case 2:
-                        addE(level, new Skeleton(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    case 3:
-                        addE(level, new Knight(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    default:
-                        break;
-                }
-                enemyChooser = 1 + randomInt.nextInt(3);
+        
+        for (int i = 0; i < difficulty * DIFFICULTY_MODIFIER; i++) {
+            switch (enemyChooser) {
+                case 1:
+                    addE(level, new Ghoul(300 + randomInt.nextInt(7170), HEIGHT - 128));
+                case 2:
+                    addE(level, new Skeleton(300 + randomInt.nextInt(7170), HEIGHT - 128));
+                case 3:
+                    addE(level, new Knight(300 + randomInt.nextInt(7170), HEIGHT - 128));
+                default:
+                    break;
             }
-        }
-
-        if (difficulty == 2) {
-            for (int i = 0; i < 10; i++) {
-                switch (enemyChooser) {
-
-                    case 1:
-                        addE(level, new Ghoul(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    case 2:
-                        addE(level, new Skeleton(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    case 3:
-                        addE(level, new Knight(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    default:
-                        break;
-                }
-                enemyChooser = 1 + randomInt.nextInt(3);
-            }
-        }
-        if (difficulty == 3) {
-            for (int i = 0; i < 15; i++) {
-                switch (enemyChooser) {
-
-                    case 1:
-                        addE(level, new Ghoul(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    case 2:
-                        addE(level, new Skeleton(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    case 3:
-                        addE(level, new Knight(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    default:
-                        break;
-                }
-                enemyChooser = 1 + randomInt.nextInt(3);
-            }
-        }
-        if (difficulty == 4) {
-            for (int i = 0; i < 100; i++) {
-                switch (enemyChooser) {
-
-                    case 1:
-                        addE(level, new Ghoul(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    case 2:
-                        addE(level, new Skeleton(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    case 3:
-                        addE(level, new Knight(300 + randomInt.nextInt(7170), HEIGHT - 128));
-                    default:
-                        break;
-                }
-                enemyChooser = 1 + randomInt.nextInt(3);
-            }
+            enemyChooser = 1 + randomInt.nextInt(3);
         }
     }
 
@@ -926,7 +876,7 @@ public class Game extends JFrame implements Runnable, KeyListener {
     public static void setIsDead(boolean b) {
         isDead = b;
     }
-    
+
     public static int getLevelNumber() {
         return levelNumber;
     }

@@ -135,16 +135,14 @@ public class Ghoul extends Enemy {
     }
 
     private boolean outsideRange() {
-        if (Math.abs(this.x - xOrigin) > RANGE) {
-            return true;
-        }
-        return false;
+        return Math.abs(this.x - xOrigin) > RANGE;
     }
 
     private void setVelx(int vel) {
         this.velX = vel;
     }
 
+    @Override
     public BufferedImage getImage() {
         return currentImage;
     }
