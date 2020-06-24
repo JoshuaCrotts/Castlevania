@@ -1,5 +1,24 @@
-# Castlevania
+<h1 align="center">Castlevania</h1>
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0e2f343ca7184937b02d891bf5b93ccf)](https://app.codacy.com/app/JoshuaCrotts/Castlevania?utm_source=github.com&utm_medium=referral&utm_content=JoshuaCrotts/Castlevania&utm_campaign=Badge_Grade_Settings)
+<p align="center">
+  <img width="350" height="350" src="castlevania.gif">
+</p>
 
-My very first video game I am trying to create. This is a replication of the old school Castlevania. Let's have some fun!
+[![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/castlevania/badge)](https://www.codefactor.io/repository/github/joshuacrotts/castlevania) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/Castlevania) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/Castlevania) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/Castlevania)
+
+Castlevania is the first game I ever wrote in Java. [!Brandon Willis](https://github.com/ballenwillis) helped with the physics, spritesheet manipulation and splicing, and general debugging. While the code is disorganized and unoptimized, I appreciate this project because it helped me dip my feet in the waters of game development.
+
+## Dependencies
+
+There are no dependencies for this project.
+
+## Rebuilding Castlevania
+
+To rebuild the code, clone the repository to your computer. This project was originally created with the Eclipse IDE. However, you may use any IDE that you like. Upon re-testing this project with NetBeans 8.2, it worked without a hitch. 
+
+## Reporting Bugs
+
+See the Issues Tab.
+
+## Version History
+The **master** branch encompassed all changes during development. This project is discontinued.
