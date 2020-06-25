@@ -4,7 +4,7 @@
   <img width="350" height="250" src="castlevania.gif">
 </p>
 
-[![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/castlevania/badge)](https://www.codefactor.io/repository/github/joshuacrotts/castlevania) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/Castlevania) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/Castlevania) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/Castlevania)
+[![CodeFactor](https://www.codefactor.io/repository/github/joshuacrotts/castlevania/badge) ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JoshuaCrotts/Castlevania) ![GitHub repo size](https://img.shields.io/github/repo-size/JoshuaCrotts/Castlevania) ![GitHub contributors](https://img.shields.io/github/contributors/JoshuaCrotts/Castlevania)
 
 Castlevania is the first game I ever wrote in Java. [Brandon Willis](https://github.com/ballenwillis) helped with the physics, spritesheet manipulation and splicing, and general debugging. While the code is disorganized and unoptimized, I appreciate this project because it helped me dip my feet in the waters of game development.
 
